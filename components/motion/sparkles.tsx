@@ -1,61 +1,70 @@
 import type { CSSProperties } from "react";
 
-type Sparkle = {
-  /** Position inside the parent box, in % (left, top). */
-  x: number;
-  y: number;
+type Spark = {
+  /** Direction: 0° = straight up, negative = left, positive = right. */
+  rot: number;
+  /** How far it flies from the burst origin, in px. */
+  dist: number;
   /** Size in px. */
   s: number;
-  /** Drift while fading out, in px. */
-  dx: number;
-  dy: number;
-  /** Delay inside the 1.6 s jump cycle, in ms. */
-  d: number;
   tone: "lime" | "white" | "gold";
-  shape?: "star" | "dot";
+  shape: "star" | "dot";
+  /** Small extra delay so the burst comes in two waves, in ms. */
+  lag?: number;
 };
 
-/** Around the head, shoulders and raised fists (upper ~55% of the cutout). */
-const SPARKLES: Sparkle[] = [
-  { x: 8, y: 6, s: 16, dx: -14, dy: -16, d: 0, tone: "lime" },
-  { x: 92, y: 4, s: 18, dx: 14, dy: -18, d: 60, tone: "gold" },
-  { x: 50, y: -6, s: 14, dx: 0, dy: -20, d: 120, tone: "white" },
-  { x: -4, y: 30, s: 12, dx: -18, dy: -4, d: 180, tone: "white" },
-  { x: 104, y: 28, s: 14, dx: 18, dy: -6, d: 90, tone: "lime" },
-  { x: 24, y: -2, s: 9, dx: -8, dy: -14, d: 220, tone: "gold", shape: "dot" },
-  { x: 76, y: -4, s: 8, dx: 8, dy: -14, d: 30, tone: "lime", shape: "dot" },
-  { x: 2, y: 50, s: 7, dx: -14, dy: 4, d: 260, tone: "lime", shape: "dot" },
-  { x: 98, y: 50, s: 7, dx: 14, dy: 4, d: 150, tone: "white", shape: "dot" },
-  { x: 66, y: 14, s: 10, dx: 10, dy: -10, d: 300, tone: "white" },
-];
-
-const TONE: Record<Sparkle["tone"], string> = {
+const TONE: Record<Spark["tone"], string> = {
   lime: "#b5f63d",
   white: "#ffffff",
   gold: "#ffd54a",
 };
 
+const TONES: Spark["tone"][] = ["lime", "white", "gold"];
+
 /**
- * Celebration sparkles that burst around the mascot's upper body at the top
- * of each jump. Pure CSS (clip-path stars + dots), decorative only; hidden
- * when the visitor prefers reduced motion.
+ * Upper arc only (−120° … +120°), so nothing flies down across the body.
+ * Stars in the first wave, dots slightly later and further out.
+ */
+const SPARKS: Spark[] = [
+  ...[-120, -84, -48, -14, 18, 52, 88, 120].map((rot, i) => ({
+    rot,
+    dist: 62 + (i % 3) * 8,
+    s: 13 + (i % 2) * 4,
+    tone: TONES[i % 3],
+    shape: "star" as const,
+  })),
+  ...[-102, -66, -32, 2, 34, 70, 104].map((rot, i) => ({
+    rot,
+    dist: 92 + (i % 2) * 12,
+    s: 6 + (i % 2) * 2,
+    tone: TONES[(i + 1) % 3],
+    shape: "dot" as const,
+    lag: 60,
+  })),
+];
+
+/**
+ * Firecracker-style celebration burst (same idea as the astrogaon "How it
+ * works" cracker): a flash at one fixed point, then sparkles fly outward along
+ * their own angle and fade. The origin does NOT move with the mascot; the
+ * burst is timed to the top of the jump (jump peaks at 45% of 1.6 s).
+ * Decorative only; hidden when the visitor prefers reduced motion.
  */
 export function CelebrationSparkles() {
   return (
-    <span aria-hidden className="pointer-events-none absolute inset-0">
-      {SPARKLES.map((p, i) => (
+    <span aria-hidden className="pointer-events-none absolute left-1/2 top-[22%] z-10 h-0 w-0">
+      <span className="burst-flash absolute left-0 top-0 h-16 w-16 rounded-full" />
+      {SPARKS.map((p, i) => (
         <span
           key={i}
-          className="sparkle absolute"
+          className="burst-spark absolute left-0 top-0"
           style={
             {
-              left: `${p.x}%`,
-              top: `${p.y}%`,
               width: p.s,
               height: p.s,
-              "--dx": `${p.dx}px`,
-              "--dy": `${p.dy}px`,
-              "--d": `${p.d}ms`,
+              "--rot": `${p.rot}deg`,
+              "--dist": `${p.dist}px`,
+              "--lag": `${p.lag ?? 0}ms`,
               filter: `drop-shadow(0 0 4px ${TONE[p.tone]})`,
             } as CSSProperties
           }

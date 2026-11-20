@@ -175,12 +175,21 @@ body {
   45% { transform: translateY(-14%) scale(0.98, 1.03); }
   78% { transform: translateY(0) scale(1.03, 0.97); }
 }
-@keyframes sparkle {
-  /* bursts near the top of the jump (jump peaks at 45% of 1.6 s) */
-  0%, 22% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
-  38% { opacity: 1; transform: translate(-50%, -50%) scale(1.15) rotate(45deg); }
-  56% { opacity: 0.9; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.8) rotate(90deg); }
-  72%, 100% { opacity: 0; transform: translate(calc(-50% + var(--dx) * 1.6), calc(-50% + var(--dy) * 1.6)) scale(0) rotate(135deg); }
+/*
+ * Celebration burst (firecracker style): quiet until the jump peaks
+ * (≈ 40–45% of the 1.6 s cycle), then a flash and sparks flying outward along
+ * their own angle (--rot), growing then shrinking away. Quiet again after.
+ */
+@keyframes burst-spark {
+  0%, 40% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot)) translateY(0) scale(0); }
+  43% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--rot)) translateY(calc(var(--dist) * -0.35)) scale(1.15); }
+  56% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--rot)) translateY(calc(var(--dist) * -0.9)) scale(0.9) rotate(45deg); }
+  68%, 100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot)) translateY(calc(var(--dist) * -1.1)) scale(0) rotate(90deg); }
+}
+@keyframes burst-flash {
+  0%, 39% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  42% { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+  54%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.6); }
 }
 @keyframes frame-a {
   0%, 49.99% { opacity: 1; }
@@ -208,8 +217,11 @@ body {
 .sparkle-star {
   clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
 }
-/* Sparkles only exist while animating. */
-.sparkle { opacity: 0; transform: translate(-50%, -50%); }
+/* Burst pieces only exist while animating. */
+.burst-spark, .burst-flash { opacity: 0; }
+.burst-flash {
+  background: radial-gradient(circle, rgb(255 255 255 / 0.95) 0%, rgb(181 246 61 / 0.55) 35%, transparent 70%);
+}
 
 /* Second animation frame is hidden unless motion is allowed. */
 .frame-b { opacity: 0; }
@@ -224,7 +236,9 @@ body {
   .frame-a { animation: frame-a var(--frame-dur, 1s) infinite; }
   .frame-b { animation: frame-b var(--frame-dur, 1s) infinite; }
   .motion-jump { animation: jump 1.6s cubic-bezier(0.3, 0.6, 0.3, 1) infinite; transform-origin: 50% 100%; }
-  .sparkle { animation: sparkle 1.6s ease-out infinite; animation-delay: var(--d, 0ms); }
+  /* same 1.6 s clock as .motion-jump so the burst lands on every jump peak */
+  .burst-spark { animation: burst-spark 1.6s cubic-bezier(0.25, 1, 0.5, 1) infinite; animation-delay: var(--lag, 0ms); }
+  .burst-flash { animation: burst-flash 1.6s ease-out infinite; }
   .motion-run-bob { animation: run-bob 0.21s ease-in-out infinite; }
 
   @supports (animation-timeline: view()) {

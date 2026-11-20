@@ -1,5 +1,21 @@
 # Change log
 
+## 2026-11-20 — Sparkles: firecracker burst at the top of the jump
+
+- Owner feedback: the sparkles moved up and down with the mascot, so it never read as "he
+  jumped, then the celebration popped". Modelled the behaviour on the astrogaon home page
+  How-it-works cracker (`astrogaon/apps/weblaravel/resources/js/Pages/Welcome.jsx`,
+  `bombFlash` / `sparkLine` / `sparkDot`): one fixed origin, a flash, then pieces flying
+  outward along their own angle (`rotate(--rot) translateY(-dist)`), quiet the rest of the cycle.
+- `CelebrationSparkles` now sits OUTSIDE the jumping wrapper at a fixed point by the
+  head/shoulders. Same visual design (lime/white/gold 4-point stars + dots with glow): 8 stars
+  in a first wave, 7 dots slightly later and further, upper arc only (−120°…+120°) so nothing
+  crosses the body; plus a soft white→lime flash.
+- `@keyframes burst-spark` / `burst-flash` replace the old `sparkle` keyframe; same 1.6 s clock
+  as `.motion-jump`. Measured in the browser: jump, spark and flash animations have identical
+  phase; flash peaks at 42%, sparks fly 43–56%, jump peaks at 45%.
+- Still hidden with reduced motion. Lint, typecheck and a separate build pass.
+
 ## 2026-11-20 — Celebration sparkles on the jumping mascot
 
 - `components/motion/sparkles.tsx`: 10 decorative sparkles (CSS clip-path 4-point stars +

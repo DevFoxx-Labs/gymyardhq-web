@@ -281,11 +281,11 @@ export default function HomePage() {
           {/* Finish line: after the three sets, the mascot celebrates — on clear space, not over the art */}
           <div className="reveal mt-14 flex flex-col items-center text-center md:mt-20">
             <div aria-hidden className="pop-in relative w-28 sm:w-32">
-              {/* jump moves the mascot and its sparkles together */}
+              {/* the mascot jumps; the burst stays at a fixed point and fires at the top of each jump */}
               <div className="motion-jump relative">
                 <Image src={celebrateCutout} alt="" sizes="128px" className="h-auto w-full drop-shadow-[0_18px_22px_rgb(0_0_0/0.55)]" />
-                <CelebrationSparkles />
               </div>
+              <CelebrationSparkles />
               <span className="absolute -bottom-2 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full bg-lime/25 blur-md" />
             </div>
             <p className="font-wide mt-5 text-2xl font-black tracking-tight sm:text-3xl">
