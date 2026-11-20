@@ -1,26 +1,136 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Design tokens — mirror the Flutter app's AppTheme (lib/core/theme/app_theme.dart). */
+@theme {
+  --color-ink: #0b0c10;
+  --color-surface: #13151b;
+  --color-card: #1a1d26;
+  --color-line: #1e222d;
+  --color-line-strong: #2a2f3d;
+  --color-lime: #b5f63d;
+  --color-lime-deep: #8fd11a;
+  /* exact lime of the generated CTA artwork, so it blends without a seam */
+  --color-lime-scene: #b4fa38;
+  --color-text: #ffffff;
+  --color-muted: #94a3b8;
+  --color-active: #10b981;
+  --color-due: #f59e0b;
+  --color-overdue: #ef4444;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-deva: var(--font-hind), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 }
 
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-ink);
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-lime);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@utility font-wide {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+}
+
+/* Fine grid used behind hero/sections — pure CSS, no image request. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Weight-plate rings: concentric circles drawn with gradients. */
+@utility bg-plate {
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0 38px,
+    rgb(181 246 61 / 0.08) 38px 39px
+  );
+}
+
+/*
+ * Scene masks — dissolve photo edges into the page so images never read as
+ * boxes. Two gradients are intersected: one horizontal, one vertical.
+ */
+@utility scene-fade-l {
+  /* image sits on the right; its left edge and top/bottom dissolve */
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 42%),
+    linear-gradient(to bottom, transparent 0%, #000 16%, #000 80%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+@utility scene-fade-r {
+  /* image sits on the left; its right edge and top/bottom dissolve */
+  mask-image:
+    linear-gradient(to left, transparent 0%, #000 42%),
+    linear-gradient(to bottom, transparent 0%, #000 16%, #000 80%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+@utility scene-fade-y {
+  /* full-bleed image; only top and bottom dissolve */
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 78%, transparent 100%);
+}
+
+@utility scene-fade-b {
+  /* stacked (mobile) image above text; soft top, long bottom fade */
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 55%, transparent 100%);
+}
+
+@utility scene-vignette {
+  /* square/4:3 scenes dissolving on every side */
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 46%, #000 52%, transparent 100%);
+}
+
+/* Legal document typography */
+.legal h2 {
+  scroll-margin-top: 6rem;
 }
