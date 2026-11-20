@@ -66,7 +66,8 @@ export function BlendedScene({
       </div>
 
       {/* Desktop: artwork dissolving into the page on its inner edge */}
-      <div className={`absolute hidden md:block ${desktopBox} ${desktopMask}`}>
+      <div className={`absolute hidden overflow-hidden md:block ${desktopBox} ${desktopMask}`}>
+        <div className="parallax absolute inset-0">
         <Image
           src={image}
           alt={alt}
@@ -76,6 +77,7 @@ export function BlendedScene({
           className="object-cover"
           style={{ objectPosition: focus }}
         />
+        </div>
       </div>
       {layout === "full" && (
         <div
@@ -91,7 +93,7 @@ export function BlendedScene({
         className={`relative mx-auto max-w-6xl px-5 pb-16 md:mt-0 ${mobileOverlap === "small" ? "-mt-6 sm:-mt-10" : "-mt-24 sm:-mt-32"} md:flex md:min-h-(--scene-h) md:items-center md:py-20`}
         style={{ "--scene-h": minHeight } as CSSProperties}
       >
-        <div className={`md:w-[46%] lg:w-[42%] ${right ? "" : "md:ml-auto"}`}>{children}</div>
+        <div className={`reveal md:w-[46%] lg:w-[42%] ${right ? "" : "md:ml-auto"}`}>{children}</div>
       </div>
     </section>
   );

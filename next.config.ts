@@ -36,6 +36,8 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  /** Lets a verification build run beside `pnpm dev` without sharing (and corrupting) `.next`. */
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   turbopack: {
     rules: {
       "*.css": {

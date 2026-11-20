@@ -1,5 +1,97 @@
 # Change log
 
+## 2026-11-20 — Celebration sparkles on the jumping mascot
+
+- `components/motion/sparkles.tsx`: 10 decorative sparkles (CSS clip-path 4-point stars +
+  dots, lime / white / gold with a soft glow) placed around the celebrate cutout's head,
+  shoulders and raised fists.
+- The jump now moves a wrapper holding the cutout + sparkles, so the sparkles travel with the
+  body. `@keyframes sparkle` (1.6 s, same as the jump) bursts them near the top of each jump,
+  drifts them outward and fades them; staggered delays.
+- Hidden (opacity 0, no animation) when the visitor prefers reduced motion. No new dependency,
+  no images, transform/opacity only.
+- Verified on a separate build (port 3417): sparkle opacities go 0 → ~1 at the jump peak →
+  0 each cycle; frames captured over one cycle show the burst around the upper body.
+
+## 2026-11-20 — Two-frame scroll runner
+
+- The image the owner added (`assets/Neon Sprinting Lion Mascot-1.png`) is byte-identical to
+  `design/raw-cutouts/run-x3.png`; it has the opposite ARM forward to the current runner frame
+  (legs are the same). Renamed the raw file to `run-b.png`, cut `assets/cutouts/run-b.webp`,
+  removed the duplicate from `assets/`.
+- `ScrollRunner` now uses `FrameLoop` (run ↔ run-b every 0.21 s) inside the bob; bob shortened
+  to 0.21 s so there is one bounce per step, with less tilt.
+- Verified on a separate build: frame opacities alternate (1/0 ↔ 0/1) and both frames render
+  at the runner's position; lint and typecheck clean.
+
+## 2026-11-20 — Move the celebrating mascot
+
+- The jumping "celebrate" cutout sat on top of step 3's artwork (over that lion's head).
+  Moved it below the three steps as a finish-line moment on empty space, with
+  "That's it. You're ready." copy and a soft lime ground glow. Pops in on scroll, keeps the
+  jump loop.
+- ESLint now ignores `.next-verify/**` (the separate verification build folder).
+- Checked at 1440×900 and 390×844 on a separate build (port 3417); lint and typecheck clean.
+
+## 2026-11-20 — Fix: animations missing on the dev server
+
+- Cause: verification `next build` runs wrote into `.next` while the owner's `pnpm dev`
+  (port 3001) was running from the same folder; the dev server kept serving the CSS from
+  before the motion rules were added (HTML had the classes, CSS did not), so both animation
+  frames showed at once and nothing moved. Touching `globals.css` did not recover it.
+- `next.config.ts`: `distDir` from `NEXT_DIST_DIR` (default `.next`), so verification builds
+  go to `.next-verify/` (git-ignored) and never share the dev server's folder. CLAUDE.md
+  verify steps updated.
+- Re-verified on a fresh build (port 3417): push-up frame B opacity alternates 0 → 1, runner
+  moves 12 → 458 → 904 → 1364 px across the page scroll, punch cutout scales/rotates in on
+  scroll.
+
+## 2026-11-20 — Mascot cutouts + CSS animations on the home page
+
+**What**
+- Moved the owner's 23 generated images out of the Flutter app (`../GymYardHQ/assets/images/cutouts/`,
+  untracked there; 2 exact duplicates dropped) into `design/raw-cutouts/` with clean names, and
+  keyed them with `make_cutout.py` → 17 cutouts in `assets/cutouts/`. Owner × Mascot scenes →
+  `assets/scenes/owner-mascot-{wide,tall}.webp`.
+- `make_cutout.py`: added an alpha choke and edge-band despill (removed a faint pink rim on
+  mane tips).
+- Animations (CSS only, no new dependency):
+  - Hero: staggered load-in of copy, slow Ken Burns on the hero art, floating phone.
+  - Scroll-driven: every section's copy and tiles rise in; scene art drifts (parallax).
+  - Punch cutout punches in beside "Less paperwork. More reps." (lg+).
+  - Peeking cutout rises from behind the "Built for the whole gym" divider.
+  - Celebrating cutout pops in and jumps beside "Three sets. Done.".
+  - New "For gym owners" section: owner × mascot fist bump (tall crop on phones), blended.
+  - FAQ: waving mascot (two-frame loop) next to "Contact support".
+  - Footer: mascot doing push-ups on the footer line (two-frame loop).
+  - Scroll runner: mascot runs along a lime progress bar at the bottom (md+).
+  - 404: dumbbell-curl loop.
+- Removed `assets/scenes/not-found.webp` (404 now uses the curl cutout).
+
+**Verification**
+- `pnpm lint` 0 · `pnpm typecheck` 0 · `pnpm build` success · `pnpm verify` all passed.
+- Checked viewport-by-viewport while scrolling (so scroll animations run as for a user) at
+  1440×900 and 390×844, and with `prefers-reduced-motion: reduce` (all content visible and
+  static, runner hidden). Not measured: Lighthouse/INP numbers.
+
+**Not used yet** (available in `assets/cutouts/`): phone-showcase, point-right, flex-biceps,
+thumbs-up, sit-edge, head-avatar, owner-mascot-cutout. The three run images all show the same
+stride, so the runner uses one frame with a bob instead of a two-frame cycle.
+
+## 2026-11-20 — Cutout prompts + magenta-key cutout tool
+
+- Added `design/ai-cutout-prompts.md`: 14 mascot cutout poses (17 images incl. two-frame
+  animation pairs: wave, run, push-up, curl) and 3 Owner × Mascot prompts (16:9 wallpaper,
+  9:16 wallpaper, duo cutout), each mapped to the animation it will drive.
+- Added `design/tools/make_cutout.py` (Pillow + NumPy, no project dependency): keys out a flat
+  `#FF00FF` background with edge un-mixing and despill, trims, pads, writes PNG + WebP to
+  `assets/cutouts/`; refuses images whose corners are not magenta.
+- Root cause of the old cutouts' holes: they were keyed from black, which removed the black
+  tank top. Removed the three defective cutout exports.
+- Tested the tool on a magenta composite of the existing mascot: tank top fully kept, no pink
+  fringe on dark or lime backgrounds; non-magenta input correctly skipped.
+- `.gitignore`: `design/raw-cutouts/` (large AI source files).
+
 ## 2026-11-20 — Blend AI-generated mascot scenes into every section
 
 **What**

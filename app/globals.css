@@ -130,6 +130,142 @@ body {
   mask-image: radial-gradient(ellipse 50% 50% at 50% 46%, #000 52%, transparent 100%);
 }
 
+/*
+ * ───────────── Motion ─────────────
+ * CSS only (no JS, no library): load-in for the hero, scroll-driven reveals
+ * (animation-timeline: view()) and small mascot loops. Only transform and
+ * opacity are animated. Everything is opt-in behind prefers-reduced-motion:
+ * no-preference; browsers without scroll timelines simply show the final,
+ * static state.
+ */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes rise-soft {
+  from { transform: translateY(24px); }
+  to { transform: none; }
+}
+@keyframes kenburns {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+@keyframes drift {
+  from { transform: translateY(-3%) scale(1.08); }
+  to { transform: translateY(3%) scale(1.08); }
+}
+@keyframes punch-in {
+  from { opacity: 0; transform: translate(35%, 12%) scale(0.5) rotate(10deg); }
+  55% { opacity: 1; }
+  80% { transform: translate(-3%, 0) scale(1.06) rotate(-2deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes peek-up {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(20%) scale(0.6); }
+  70% { opacity: 1; transform: translateY(-4%) scale(1.05); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes jump {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  12% { transform: translateY(0) scale(1.04, 0.95); }
+  45% { transform: translateY(-14%) scale(0.98, 1.03); }
+  78% { transform: translateY(0) scale(1.03, 0.97); }
+}
+@keyframes sparkle {
+  /* bursts near the top of the jump (jump peaks at 45% of 1.6 s) */
+  0%, 22% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
+  38% { opacity: 1; transform: translate(-50%, -50%) scale(1.15) rotate(45deg); }
+  56% { opacity: 0.9; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.8) rotate(90deg); }
+  72%, 100% { opacity: 0; transform: translate(calc(-50% + var(--dx) * 1.6), calc(-50% + var(--dy) * 1.6)) scale(0) rotate(135deg); }
+}
+@keyframes frame-a {
+  0%, 49.99% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes frame-b {
+  0%, 49.99% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+@keyframes run-bob {
+  /* one bounce per step; frames swap every 0.21s */
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-9%) rotate(1.5deg); }
+}
+@keyframes run-across {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw - 5.5rem)); }
+}
+@keyframes grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* 4-point celebration star */
+.sparkle-star {
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+}
+/* Sparkles only exist while animating. */
+.sparkle { opacity: 0; transform: translate(-50%, -50%); }
+
+/* Second animation frame is hidden unless motion is allowed. */
+.frame-b { opacity: 0; }
+/* The scroll runner only exists where scroll timelines are supported. */
+.run-track { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-rise { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: var(--d, 0ms); }
+  .motion-rise-soft { animation: rise-soft 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: var(--d, 0ms); }
+  .motion-kenburns { animation: kenburns 2.2s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+  .frame-a { animation: frame-a var(--frame-dur, 1s) infinite; }
+  .frame-b { animation: frame-b var(--frame-dur, 1s) infinite; }
+  .motion-jump { animation: jump 1.6s cubic-bezier(0.3, 0.6, 0.3, 1) infinite; transform-origin: 50% 100%; }
+  .sparkle { animation: sparkle 1.6s ease-out infinite; animation-delay: var(--d, 0ms); }
+  .motion-run-bob { animation: run-bob 0.21s ease-in-out infinite; }
+
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 6%) entry calc(65% + var(--i, 0) * 6%);
+    }
+    .parallax {
+      animation: drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+    .punch-in {
+      animation: punch-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 42%;
+    }
+    .peek-up {
+      animation: peek-up linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 45%;
+    }
+    .pop-in {
+      animation: pop-in linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 90%;
+    }
+    .run-track { display: block; }
+    .run-progress {
+      animation: run-across linear both;
+      animation-timeline: scroll(root);
+    }
+    .run-fill {
+      animation: grow-x linear both;
+      animation-timeline: scroll(root);
+      transform-origin: 0 50%;
+    }
+  }
+}
+
 /* Legal document typography */
 .legal h2 {
   scroll-margin-top: 6rem;

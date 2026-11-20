@@ -16,7 +16,7 @@ type Props = {
  */
 export function SceneTile({ image, alt = "", sizes = "(min-width: 768px) 50vw, 100vw", ratio = "landscape", children }: Props) {
   return (
-    <div className="relative">
+    <div className="reveal relative">
       <div className={`scene-vignette relative w-full ${ratio === "square" ? "aspect-square" : "aspect-[4/3]"}`}>
         <Image src={image} alt={alt} fill sizes={sizes} placeholder="blur" className="object-cover" />
       </div>

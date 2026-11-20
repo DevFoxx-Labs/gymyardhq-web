@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { IconSvgElement } from "@hugeicons/react";
 import {
@@ -28,7 +29,16 @@ import step1Scene from "@/assets/scenes/step-1.webp";
 import step2Scene from "@/assets/scenes/step-2.webp";
 import step3Scene from "@/assets/scenes/step-3.webp";
 import trainersScene from "@/assets/scenes/trainers.webp";
+import celebrateCutout from "@/assets/cutouts/celebrate.webp";
+import peekCutout from "@/assets/cutouts/peek-edge.webp";
+import punchCutout from "@/assets/cutouts/punch-camera.webp";
+import waveA from "@/assets/cutouts/wave-hello-a.webp";
+import waveB from "@/assets/cutouts/wave-hello-b.webp";
 import { Hero } from "@/components/home/hero";
+import { OwnerSection } from "@/components/home/owner-section";
+import { FrameLoop } from "@/components/motion/frame-loop";
+import { CelebrationSparkles } from "@/components/motion/sparkles";
+import { ScrollRunner } from "@/components/motion/scroll-runner";
 import { Icon } from "@/components/icon";
 import { PlayStoreButton } from "@/components/play-store-button";
 import { BlendedScene } from "@/components/scene/blended-scene";
@@ -156,6 +166,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <ScrollRunner />
 
       {/* ───────────── MARQUEE ───────────── */}
       <div className="relative z-10 overflow-hidden py-3" aria-hidden>
@@ -178,8 +189,8 @@ export default function HomePage() {
       {/* ───────────── HIGHLIGHTS ───────────── */}
       <section aria-label="Highlights">
         <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-y-10 px-5 py-16 md:grid-cols-4">
-          {highlights.map((h) => (
-            <div key={h.label} className="border-l border-line pl-5">
+          {highlights.map((h, i) => (
+            <div key={h.label} className="reveal border-l border-line pl-5" style={{ "--i": i } as CSSProperties}>
               <dd className="font-wide text-4xl font-black text-white sm:text-5xl">{h.value}</dd>
               <dt className="mt-2 text-sm text-muted">{h.label}</dt>
             </div>
@@ -188,7 +199,11 @@ export default function HomePage() {
       </section>
 
       {/* ───────────── FEATURE CHAPTERS (full-bleed, blended) ───────────── */}
-      <div className="mx-auto max-w-6xl px-5 pt-10 text-center md:pt-16">
+      <div className="relative mx-auto max-w-6xl px-5 pt-10 text-center md:pt-16">
+        {/* Mascot cutout punches in from the side as the heading scrolls into view */}
+        <div aria-hidden className="punch-in pointer-events-none absolute -right-6 -top-10 hidden w-[230px] lg:block xl:-right-16 xl:w-[290px]">
+          <Image src={punchCutout} alt="" sizes="290px" className="h-auto w-full drop-shadow-[0_30px_40px_rgb(0_0_0/0.6)]" />
+        </div>
         <Eyebrow>Features</Eyebrow>
         <h2 className="font-wide mx-auto mt-3 max-w-3xl text-4xl font-black tracking-tight sm:text-6xl">
           Less paperwork. <span className="text-lime">More reps.</span>
@@ -217,13 +232,21 @@ export default function HomePage() {
 
       {/* ───────────── MORE FEATURES (dissolving scenes) ───────────── */}
       <section aria-labelledby="more-features" className="mx-auto max-w-6xl px-5 py-16 md:py-24">
-        <div className="max-w-2xl">
-          <Eyebrow>And there&apos;s more</Eyebrow>
-          <h2 id="more-features" className="font-wide mt-3 text-4xl font-black tracking-tight sm:text-5xl">
-            Built for the whole gym.
-          </h2>
+        <div className="relative border-b border-white/10 pb-8">
+          <div className="reveal max-w-2xl">
+            <Eyebrow>And there&apos;s more</Eyebrow>
+            <h2 id="more-features" className="font-wide mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+              Built for the whole gym.
+            </h2>
+          </div>
+          {/* Peeks up from behind the divider line */}
+          <div aria-hidden className="pointer-events-none absolute bottom-0 right-0 h-[110px] w-[160px] overflow-hidden sm:h-[150px] sm:w-[220px] lg:right-6">
+            <div className="peek-up absolute inset-x-0 bottom-0">
+              <Image src={peekCutout} alt="" sizes="220px" className="h-auto w-full" />
+            </div>
+          </div>
         </div>
-        <div className="mt-6 grid gap-x-4 gap-y-10 md:grid-cols-2">
+        <div className="mt-2 grid gap-x-4 gap-y-10 md:grid-cols-2">
           {tiles.map((t) => (
             <SceneTile key={t.title} image={t.image}>
               <h3 className="text-2xl font-bold">{t.title}</h3>
@@ -243,7 +266,7 @@ export default function HomePage() {
           </div>
           <ol className="mt-4 grid gap-y-12 md:grid-cols-3 md:gap-x-2">
             {steps.map((s, i) => (
-              <li key={s.title}>
+              <li key={s.title} className="reveal" style={{ "--i": i } as CSSProperties}>
                 <SceneTile image={s.image} ratio="square" sizes="(min-width: 768px) 34vw, 100vw">
                   <span className="font-wide flex h-12 w-12 items-center justify-center rounded-2xl bg-lime text-xl font-black text-ink">
                     {i + 1}
@@ -254,6 +277,22 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
+
+          {/* Finish line: after the three sets, the mascot celebrates — on clear space, not over the art */}
+          <div className="reveal mt-14 flex flex-col items-center text-center md:mt-20">
+            <div aria-hidden className="pop-in relative w-28 sm:w-32">
+              {/* jump moves the mascot and its sparkles together */}
+              <div className="motion-jump relative">
+                <Image src={celebrateCutout} alt="" sizes="128px" className="h-auto w-full drop-shadow-[0_18px_22px_rgb(0_0_0/0.55)]" />
+                <CelebrationSparkles />
+              </div>
+              <span className="absolute -bottom-2 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full bg-lime/25 blur-md" />
+            </div>
+            <p className="font-wide mt-5 text-2xl font-black tracking-tight sm:text-3xl">
+              That&apos;s it. <span className="text-lime">You&apos;re ready.</span>
+            </p>
+            <p className="mt-2 text-white/65">Your gym runs smoother from day one.</p>
+          </div>
         </div>
       </section>
 
@@ -289,6 +328,9 @@ export default function HomePage() {
         </div>
       </BlendedScene>
 
+      {/* ───────────── OWNER × MASCOT ───────────── */}
+      <OwnerSection />
+
       {/* ───────────── FAQ ───────────── */}
       <BlendedScene id="faq" image={faqScene} imageSide="left" focus="20% 50%" mobileOverlap="small" minHeight="clamp(620px, 54vw, 880px)">
         <Eyebrow>FAQ</Eyebrow>
@@ -306,13 +348,16 @@ export default function HomePage() {
             </details>
           ))}
         </div>
-        <p className="mt-6 text-sm text-white/65">
-          Still stuck?{" "}
-          <Link href="/contact" className="text-white underline underline-offset-4 hover:text-lime">
-            Contact support
-          </Link>
-          .
-        </p>
+        <div className="mt-6 flex items-end gap-3">
+          <FrameLoop a={waveA} b={waveB} duration="0.9s" sizes="80px" className="pop-in w-14 shrink-0 sm:w-16" />
+          <p className="pb-2 text-sm text-white/65">
+            Still stuck?{" "}
+            <Link href="/contact" className="text-white underline underline-offset-4 hover:text-lime">
+              Contact support
+            </Link>{" "}
+            — we&apos;re happy to help.
+          </p>
+        </div>
       </BlendedScene>
 
       {/* ───────────── DOWNLOAD (lime, full-bleed) ───────────── */}

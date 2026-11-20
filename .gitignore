@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raw AI images for cutouts (large source files; outputs go to assets/cutouts)
+/design/raw-cutouts/
+/.next-verify/

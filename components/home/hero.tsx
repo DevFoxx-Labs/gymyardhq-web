@@ -1,5 +1,6 @@
 import { getImageProps } from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { ArrowRight01Icon, CheckmarkBadge01Icon, Invoice01Icon } from "@hugeicons/core-free-icons";
 import heroDesktop from "@/assets/scenes/hero-desktop.webp";
 import heroMobile from "@/assets/scenes/hero-mobile.webp";
@@ -29,7 +30,7 @@ export function Hero() {
         <img
           {...img}
           srcSet={mobileSet}
-          className="absolute bottom-0 left-0 -z-10 h-auto w-full md:inset-0 md:h-full md:object-cover md:object-[72%_40%]"
+          className="motion-kenburns absolute bottom-0 left-0 -z-10 h-auto w-full md:inset-0 md:h-full md:object-cover md:object-[72%_40%]"
         />
       </picture>
 
@@ -45,24 +46,24 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-6xl px-5 pt-12 sm:pt-16 md:flex md:min-h-[clamp(620px,52vw,860px)] md:items-center md:py-20">
         <div className="max-w-xl">
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-ink/60 px-3 py-1.5 text-xs text-muted backdrop-blur">
+          <p className="motion-rise inline-flex items-center gap-2 rounded-full border border-white/10 bg-ink/60 px-3 py-1.5 text-xs text-muted backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-lime" />
             Gym management app · Made for India
           </p>
 
-          <h1 className="font-wide mt-6 text-[2.6rem] font-black leading-[0.95] tracking-tight sm:text-6xl xl:text-[4.1rem]">
+          <h1 className="motion-rise-soft font-wide mt-6 text-[2.6rem] font-black leading-[0.95] tracking-tight sm:text-6xl xl:text-[4.1rem]">
             <span className="sm:whitespace-nowrap">Run your gym</span>
             <br />
             <span className="text-lime">like a pro.</span>
           </h1>
 
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/70">
+          <p className="motion-rise mt-6 max-w-lg text-lg leading-relaxed text-white/70" style={{ "--d": "120ms" } as CSSProperties}>
             Members, fees, UPI bills, receipts and reminders — in one app that works{" "}
             <span className="text-white">without internet</span> and keeps your data{" "}
             <span className="text-white">on your phone</span>.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="motion-rise mt-8 flex flex-wrap items-center gap-3" style={{ "--d": "220ms" } as CSSProperties}>
             <PlayStoreButton size="lg" />
             <Link
               href="#features"
@@ -72,7 +73,7 @@ export function Hero() {
             </Link>
           </div>
 
-          <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/70">
+          <ul className="motion-rise mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/70" style={{ "--d": "320ms" } as CSSProperties}>
             {["No subscription", "No ads", "English & हिन्दी"].map((t) => (
               <li key={t} className="flex items-center gap-1.5">
                 <Icon icon={CheckmarkBadge01Icon} size={16} className="text-lime" /> {t}
@@ -83,7 +84,7 @@ export function Hero() {
 
         {/* App preview floats between the copy and the mascot on wide screens */}
         <div className="pointer-events-none absolute left-[52%] top-[56%] hidden -translate-y-1/2 xl:block">
-          <div className="relative origin-left scale-[0.8]">
+          <div className="motion-rise relative origin-left scale-[0.8]" style={{ "--d": "400ms" } as CSSProperties}>
             <PhoneMockup className="animate-float" />
             <div className="absolute -left-14 bottom-28 flex items-center gap-2.5 rounded-2xl border border-white/10 bg-surface/90 px-3.5 py-2.5 shadow-2xl backdrop-blur" aria-hidden>
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-lime text-ink">

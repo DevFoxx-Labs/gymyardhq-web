@@ -29,6 +29,14 @@ database safety, engineering workflow, web performance). Project-specific points
   dissolving into the page via `scene-fade-*` masks; stacked with a fade on phones) or
   `components/scene/scene-tile.tsx` (radial `scene-vignette` dissolve). No borders or rounded
   frames around artwork. Sections that sit on lime use `tone="lime"` (`--color-lime-scene`).
+- **Motion (CSS only, no animation library):** classes in `app/globals.css` → `motion-rise*`
+  (hero load-in), `reveal` / `parallax` / `punch-in` / `peek-up` / `pop-in` (scroll-driven via
+  `animation-timeline: view()`), `motion-jump`, `frame-a/-b` (two-frame loops via
+  `components/motion/frame-loop.tsx`), `ScrollRunner` (`scroll(root)`). Animate only `transform`
+  and `opacity`; everything sits inside `prefers-reduced-motion: no-preference`; browsers without
+  scroll timelines get the static end state. Never fade the LCP element's opacity.
+- Mascot cutouts: `assets/cutouts/*.webp`, made with `design/tools/make_cutout.py` from flat
+  `#FF00FF` sources in `design/raw-cutouts/` (git-ignored). Prompts: `design/ai-cutout-prompts.md`.
 - Hero uses art direction (`getImageProps` + `<picture>`), eager + `fetchPriority="high"`;
   everything else is lazy.
 
@@ -47,8 +55,9 @@ database safety, engineering workflow, web performance). Project-specific points
 
 ## Verify before "done"
 ```
-pnpm lint && pnpm typecheck && pnpm build
-pnpm start -p 3417            # separate terminal
+pnpm lint && pnpm typecheck
+NEXT_DIST_DIR=.next-verify pnpm build            # never build into .next while `pnpm dev` runs
+NEXT_DIST_DIR=.next-verify pnpm start -p 3417    # separate terminal
 BASE_URL=http://localhost:3417 pnpm verify
 ```
 Record each task in `changes/CHANGELOG.md`; gaps in `docs/known-gaps.md`; owner steps in
