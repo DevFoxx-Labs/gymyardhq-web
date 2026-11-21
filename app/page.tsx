@@ -36,6 +36,7 @@ import waveA from "@/assets/cutouts/wave-hello-a.webp";
 import waveB from "@/assets/cutouts/wave-hello-b.webp";
 import { Hero } from "@/components/home/hero";
 import { OwnerSection } from "@/components/home/owner-section";
+import { Showcase } from "@/components/home/showcase";
 import { FrameLoop } from "@/components/motion/frame-loop";
 import { CelebrationSparkles } from "@/components/motion/sparkles";
 import { ScrollRunner } from "@/components/motion/scroll-runner";
@@ -197,6 +198,9 @@ export default function HomePage() {
           ))}
         </dl>
       </section>
+
+      {/* ───────────── PINNED SHOWCASE (Apple-style) ───────────── */}
+      <Showcase />
 
       {/* ───────────── FEATURE CHAPTERS (full-bleed, blended) ───────────── */}
       <div className="relative mx-auto max-w-6xl px-5 pt-10 text-center md:pt-16">

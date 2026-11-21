@@ -1,5 +1,21 @@
 # Change log
 
+## 2026-11-21 — Apple-style parallax: hero depth + pinned showcase
+
+- Hero depth layers (`depth-copy` / `depth-phone` / `depth-bg`, `animation-timeline: scroll(root)`,
+  range 0–90vh): copy rises and fades fastest, the phone rises slower, the hero art zooms in
+  slowest — the scene "pulls away" in layers as you scroll.
+- New `components/home/showcase.tsx` after the highlights: a 340vh section with a sticky
+  full-screen stage (view timeline `--showcase`). The phone rises and untilts from a 3D tilt
+  into place, a lime glow grows behind it, the flexing mascot drifts in at a slower depth, and
+  three chapters (Dashboard → Billing → Privacy) cross-fade with blur while matching callout
+  chips pop beside the phone. Mobile: phone above, chapters below, same behaviour.
+- Fallback: with reduced motion or without scroll timelines the section is a normal static
+  block (no pinning, all chapters listed). Only transform/opacity/filter animated; no JS, no
+  new dependency.
+- Verified on a separate build at 1440×900 and 390×844 at several scroll positions; no
+  horizontal scroll; lint, typecheck, `pnpm verify` pass.
+
 ## 2026-11-20 — Sparkles: firecracker burst at the top of the jump
 
 - Owner feedback: the sparkles moved up and down with the mascot, so it never read as "he

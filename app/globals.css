@@ -280,6 +280,120 @@ body {
   }
 }
 
+/*
+ * ───────────── Apple-style parallax ─────────────
+ * 1) Hero depth: as the hero scrolls away, the copy rises and fades fastest,
+ *    the phone rises a bit slower, the background art zooms in slowest.
+ * 2) Showcase: a tall section (view timeline --showcase) with a sticky stage;
+ *    the phone untilts into place, the mascot drifts at a slower depth, and
+ *    three chapters + callouts take turns. Static fallback otherwise.
+ */
+.showcase { view-timeline-name: --showcase; }
+.showcase-stage { perspective: 1400px; }
+.sc-chip { opacity: 0; }
+
+@keyframes depth-copy {
+  to { opacity: 0; transform: translateY(-22vh) scale(0.96); }
+}
+@keyframes depth-phone {
+  to { transform: translateY(-12vh); }
+}
+@keyframes depth-bg {
+  to { transform: translateY(8vh) scale(1.12); }
+}
+@keyframes sc-phone {
+  from { opacity: 0.35; transform: translateY(22%) scale(0.72) rotateX(32deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes sc-glow {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes sc-mascot {
+  from { transform: translate(18%, 14%); opacity: 0; }
+  30% { opacity: 0.9; }
+  to { transform: translate(0, -10%); opacity: 0.9; }
+}
+@keyframes sc-title {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes sc-in-out {
+  0% { opacity: 0; transform: translateY(48px); filter: blur(6px); }
+  22%, 78% { opacity: 1; transform: none; filter: blur(0); }
+  100% { opacity: 0; transform: translateY(-48px); filter: blur(6px); }
+}
+@keyframes sc-in-stay {
+  0% { opacity: 0; transform: translateY(48px); filter: blur(6px); }
+  30%, 100% { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes sc-chip-in-out {
+  0% { opacity: 0; transform: scale(0.7) translateY(20px); }
+  22%, 78% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: scale(0.9) translateY(-16px); }
+}
+@keyframes sc-chip-in-stay {
+  0% { opacity: 0; transform: scale(0.7) translateY(20px); }
+  30%, 100% { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* 1) hero depth */
+    .depth-copy, .depth-phone, .depth-bg {
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+    .depth-copy { animation-name: depth-copy; }
+    .depth-phone { animation-name: depth-phone; }
+    .depth-bg { animation-name: depth-bg; transform-origin: 70% 40%; }
+
+    /* 2) pinned showcase */
+    .showcase { height: 340vh; }
+    .showcase-stage { position: sticky; top: 0; height: 100dvh; }
+    .sc-glow, .sc-phone, .sc-mascot, .sc-title, .sc-cap, .sc-chip {
+      animation-timeline: --showcase;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+    .sc-glow { animation-name: sc-glow; animation-range: entry 40% contain 25%; }
+    .sc-phone { animation-name: sc-phone; animation-range: entry 30% contain 22%; }
+    .sc-mascot { animation-name: sc-mascot; animation-range: entry 60% exit 0%; }
+    .sc-title { animation-name: sc-title; animation-range: entry 50% contain 8%; }
+
+    .sc-caps { position: relative; height: 11rem; }
+    .sc-cap {
+      position: absolute;
+      inset: 0 0 auto 0;
+      animation-name: sc-in-out;
+      animation-range:
+        contain calc(14% + var(--n) * 28%)
+        contain calc(42% + var(--n) * 28%);
+    }
+    .sc-cap:last-child {
+      animation-name: sc-in-stay;
+      animation-range: contain 70% contain 90%;
+    }
+    .sc-chip {
+      animation-name: sc-chip-in-out;
+      animation-range:
+        contain calc(16% + var(--n) * 28%)
+        contain calc(42% + var(--n) * 28%);
+    }
+    .sc-chip:last-of-type {
+      animation-name: sc-chip-in-stay;
+      animation-range: contain 72% contain 90%;
+    }
+  }
+}
+
+/* No scroll timelines or reduced motion: everything visible, no pinning. */
+@media (prefers-reduced-motion: reduce) {
+  .sc-chip { opacity: 1; }
+}
+
 /* Legal document typography */
 .legal h2 {
   scroll-margin-top: 6rem;

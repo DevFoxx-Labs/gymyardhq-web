@@ -35,6 +35,8 @@ database safety, engineering workflow, web performance). Project-specific points
   `components/motion/frame-loop.tsx`), `ScrollRunner` (`scroll(root)`). Animate only `transform`
   and `opacity`; everything sits inside `prefers-reduced-motion: no-preference`; browsers without
   scroll timelines get the static end state. Never fade the LCP element's opacity.
+- Parallax: hero depth layers (`depth-*`, `scroll(root)`) and the pinned `Showcase`
+  (view timeline `--showcase`, sticky stage). New pinned sections must keep a static fallback.
 - Mascot cutouts: `assets/cutouts/*.webp`, made with `design/tools/make_cutout.py` from flat
   `#FF00FF` sources in `design/raw-cutouts/` (git-ignored). Prompts: `design/ai-cutout-prompts.md`.
 - Hero uses art direction (`getImageProps` + `<picture>`), eager + `fetchPriority="high"`;
