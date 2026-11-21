@@ -50,9 +50,13 @@ const SPARKS: Spark[] = [
  * burst is timed to the top of the jump (jump peaks at 45% of 1.6 s).
  * Decorative only; hidden when the visitor prefers reduced motion.
  */
-export function CelebrationSparkles() {
+export function CelebrationSparkles({ scale = 1, top = "22%" }: { scale?: number; top?: string }) {
   return (
-    <span aria-hidden className="pointer-events-none absolute left-1/2 top-[22%] z-10 h-0 w-0">
+    <span
+      aria-hidden
+      className="pointer-events-none absolute left-1/2 z-10 h-0 w-0"
+      style={{ top, transform: scale === 1 ? undefined : `scale(${scale})` }}
+    >
       <span className="burst-flash absolute left-0 top-0 h-16 w-16 rounded-full" />
       {SPARKS.map((p, i) => (
         <span

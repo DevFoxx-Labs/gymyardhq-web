@@ -337,6 +337,34 @@ body {
   30%, 100% { opacity: 1; transform: none; }
 }
 
+
+/* Finale ("That's it. You're ready.") — pinned, full-height */
+.finale { view-timeline-name: --finale; }
+@keyframes fn-mascot {
+  from { opacity: 0; transform: translateY(45%) scale(0.6); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fn-line1 {
+  from { opacity: 0; transform: translateX(-35%) scale(0.9); filter: blur(10px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes fn-line2 {
+  from { opacity: 0; transform: translateX(35%) scale(0.9); filter: blur(10px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes fn-logo {
+  from { opacity: 0; transform: translateY(30%) scale(0.6) rotate(-14deg); }
+  to { transform: none; }
+}
+@keyframes fn-cta {
+  from { opacity: 0; transform: translateX(30%); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fn-glow {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     /* 1) hero depth */
@@ -349,6 +377,21 @@ body {
     .depth-copy { animation-name: depth-copy; }
     .depth-phone { animation-name: depth-phone; }
     .depth-bg { animation-name: depth-bg; transform-origin: 70% 40%; }
+
+    /* finale */
+    .finale { height: 280vh; }
+    .finale-stage { position: sticky; top: 0; }
+    .fn-mascot, .fn-line1, .fn-line2, .fn-logo, .fn-cta, .fn-glow {
+      animation-timeline: --finale;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+    .fn-glow { animation-name: fn-glow; animation-range: entry 30% contain 20%; }
+    .fn-mascot { animation-name: fn-mascot; animation-range: entry 35% contain 25%; }
+    .fn-line1 { animation-name: fn-line1; animation-range: entry 70% contain 35%; }
+    .fn-line2 { animation-name: fn-line2; animation-range: contain 20% contain 50%; }
+    .fn-logo { animation-name: fn-logo; animation-range: contain 35% contain 62%; }
+    .fn-cta { animation-name: fn-cta; animation-range: contain 45% contain 72%; }
 
     /* 2) pinned showcase */
     .showcase { height: 340vh; }

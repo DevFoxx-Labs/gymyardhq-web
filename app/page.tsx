@@ -29,16 +29,15 @@ import step1Scene from "@/assets/scenes/step-1.webp";
 import step2Scene from "@/assets/scenes/step-2.webp";
 import step3Scene from "@/assets/scenes/step-3.webp";
 import trainersScene from "@/assets/scenes/trainers.webp";
-import celebrateCutout from "@/assets/cutouts/celebrate.webp";
 import peekCutout from "@/assets/cutouts/peek-edge.webp";
 import punchCutout from "@/assets/cutouts/punch-camera.webp";
 import waveA from "@/assets/cutouts/wave-hello-a.webp";
 import waveB from "@/assets/cutouts/wave-hello-b.webp";
 import { Hero } from "@/components/home/hero";
+import { Finale } from "@/components/home/finale";
 import { OwnerSection } from "@/components/home/owner-section";
 import { Showcase } from "@/components/home/showcase";
 import { FrameLoop } from "@/components/motion/frame-loop";
-import { CelebrationSparkles } from "@/components/motion/sparkles";
 import { ScrollRunner } from "@/components/motion/scroll-runner";
 import { Icon } from "@/components/icon";
 import { PlayStoreButton } from "@/components/play-store-button";
@@ -281,24 +280,11 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
-
-          {/* Finish line: after the three sets, the mascot celebrates — on clear space, not over the art */}
-          <div className="reveal mt-14 flex flex-col items-center text-center md:mt-20">
-            <div aria-hidden className="pop-in relative w-28 sm:w-32">
-              {/* the mascot jumps; the burst stays at a fixed point and fires at the top of each jump */}
-              <div className="motion-jump relative">
-                <Image src={celebrateCutout} alt="" sizes="128px" className="h-auto w-full drop-shadow-[0_18px_22px_rgb(0_0_0/0.55)]" />
-              </div>
-              <CelebrationSparkles />
-              <span className="absolute -bottom-2 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full bg-lime/25 blur-md" />
-            </div>
-            <p className="font-wide mt-5 text-2xl font-black tracking-tight sm:text-3xl">
-              That&apos;s it. <span className="text-lime">You&apos;re ready.</span>
-            </p>
-            <p className="mt-2 text-white/65">Your gym runs smoother from day one.</p>
-          </div>
         </div>
       </section>
+
+      {/* ───────────── FINALE: That's it. You're ready. (pinned parallax) ───────────── */}
+      <Finale />
 
       {/* ───────────── PRIVACY ───────────── */}
       <BlendedScene id="privacy" image={privacyScene} layout="full" focus="80% 50%" minHeight="clamp(600px, 52vw, 860px)">

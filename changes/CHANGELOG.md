@@ -1,5 +1,21 @@
 # Change log
 
+## 2026-11-21 — Finale: full-height "That's it. You're ready." parallax section
+
+- New `components/home/finale.tsx` right after How it works (replaces the small finish-line
+  block): 280vh section with a sticky full-screen stage (view timeline `--finale`).
+  - Celebrate mascot rises to 84dvh (56dvh on phones), keeps the jump loop and the firecracker
+    burst (sparkles now accept `scale`/`top`, scaled 2.6× here).
+  - "THAT'S IT." (behind the mascot) and "YOU'RE READY." (in front, lime) set full width
+    (11.5vw / 9.4vw, Archivo wide, uppercase) sweep in from opposite sides with a de-blur.
+  - Official GymYardHQ plate logo (`assets/cutouts/logo-official.webp`, black background keyed
+    to alpha) slides/rotates in on the left; "Stronger every day. Together." + Google Play CTA
+    on the right (md+). Phones: logo sits between the headline and the mascot.
+  - Glow + plate rings behind. Static full-screen composition when motion is reduced or scroll
+    timelines are unavailable. Accessible heading via `sr-only` h2.
+- Verified on a separate build at 1440×900 and 390×844 across the scroll range; no horizontal
+  scroll; lint, typecheck, `pnpm verify` pass.
+
 ## 2026-11-21 — Apple-style parallax: hero depth + pinned showcase
 
 - Hero depth layers (`depth-copy` / `depth-phone` / `depth-bg`, `animation-timeline: scroll(root)`,
