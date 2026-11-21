@@ -1,5 +1,23 @@
 # Change log
 
+## 2026-11-21 — Design + animations packaged as global skills
+
+- Three global skills in `~/.claude/skills/`:
+  - `mascot-scroll-motion` — CSS motion kit (load-in, reveal, drift, punch-in, peek-up, pop-in,
+    jump + firecracker sparkles, two-frame loops, scroll runner, scene masks) + components,
+    `make_cutout.py`, cutout prompts.
+  - `apple-scroll-parallax` — hero depth layers, pinned showcase, pinned finale (CSS +
+    components).
+  - `gymyard-landing-kit` — the whole site as a template (`template/`, 94 files), `scaffold.py`,
+    graphics manifest and brand-swap guide; only graphics, colour tokens and product text change.
+- To make recolouring a token-only change, replaced the remaining hard-coded accent/ink colours
+  with tokens (`color-mix(... var(--color-lime) ...)` in globals.css, hero gradient, phone
+  shadow, sparkle lime). Visual output unchanged.
+- `typecheck` script now runs `next typegen` first, so a fresh clone type-checks before any build.
+- Verified the kit: scaffolded a copy, `pnpm install`, lint, typecheck, build, `pnpm verify`
+  passed; 14 full-page viewport screenshots of the copy vs this site differ by 0.000% pixels;
+  changing only `--color-lime` recolours the whole site.
+
 ## 2026-11-21 — Finale: full-height "That's it. You're ready." parallax section
 
 - New `components/home/finale.tsx` right after How it works (replaces the small finish-line

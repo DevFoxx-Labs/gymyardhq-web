@@ -64,3 +64,8 @@ BASE_URL=http://localhost:3417 pnpm verify
 ```
 Record each task in `changes/CHANGELOG.md`; gaps in `docs/known-gaps.md`; owner steps in
 `docs/owner-todo.md`.
+
+## Reusable skills built from this site
+`mascot-scroll-motion`, `apple-scroll-parallax` and `gymyard-landing-kit` (global skills) were
+extracted from this codebase. When you change the design or animations here, update the
+matching skill (`~/.claude/skills/<name>/templates` or `template/`) in the same change.
