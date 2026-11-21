@@ -47,7 +47,11 @@ const nextConfig: NextConfig = {
     },
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      /** Video file names carry a version (-v1); a new cut gets a new name, so they can be cached for a year. */
+      { source: "/videos/:file*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
+    ];
   },
   /** Short, stable URLs to paste into Google Play Console. */
   async redirects() {

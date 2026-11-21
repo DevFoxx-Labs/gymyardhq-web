@@ -1,5 +1,49 @@
 # Change log
 
+## 2026-11-22 — Hero headline animates like the finale lines
+
+- Eyebrow pill + "Run your gym" sweep in from the left and "like a pro." from the right, with
+  blur → sharp and a slight scale (same curve as `fn-line1/2`, 1.1 s, staggered 0/120/300 ms);
+  paragraph, buttons, badges and phone follow at 520–800 ms.
+- On scroll-out the lines split apart again (left line ← , right line →, blur), scroll-driven
+  over the first 70vh, on top of the existing depth-copy rise/fade. Outer span = exit, inner
+  span = entrance, so the two transforms never clash.
+- Reduced motion / no scroll-timeline support: static text as before. No horizontal overflow at
+  1440 px or 390 px. Verified: lint, typecheck, build, `pnpm verify`; stepped headless-Chrome
+  recordings of entrance and exit at 1440×900 and 390×844.
+
+## 2026-11-22 — Hero: lion scene plays as a video (desktop)
+
+- `hero.tsx`: the desktop hero art becomes `public/videos/hero-lion-v1.{webm,mp4}` (1.3 / 1.4 MB,
+  1280×720, no audio; 1 s crossfade closes the loop, seam PSNR 19.7 → 31 dB; colours already
+  matched the still). Mobile keeps the image (no 9:16 video yet) and downloads no video.
+- `SceneVideo` now wraps any still as `children` (hero keeps its `<picture>` art direction), takes
+  `media` (play only when it matches) and waits for the window `load` event (+ `startDelayMs`,
+  1.5 s on the hero so the still's Ken Burns entrance finishes first) — the video never competes
+  with the LCP image.
+- Verified: lint, typecheck, build, `pnpm verify` passed; headless Chrome — desktop 1440×900: LCP
+  is still the hero `<img>`, hero video plays (opacity 1), the download video is not requested
+  until scrolled near; 390×844 mobile: 0 video requests across the whole page.
+- Backup branch `backup/master-2026-11-22` created from master (1e065aa) before these changes.
+
+## 2026-11-22 — Download section: lion scene plays as a video
+
+- `components/motion/scene-video.tsx` (client): renders the still scene image first, then swaps
+  in a muted looping video once the scene is displayed and within 200 px of the viewport; fades in
+  on the first played frame, pauses off-screen. No video with reduced motion, Data Saver, or when
+  hidden (mobile hides this scene → phones download nothing).
+- `download-finale.tsx`: right-hand lion scene uses it; the CSS sway (`dl-sway`) is removed since
+  the video now carries the motion. Slide-in, text sweeps, high-five, sparks and CTA unchanged.
+- `public/videos/download-lion-v1.{webm,mp4}` (1.1 MB / 1.4 MB, 1280×720, 24 fps, no audio) made
+  from `design/videos/footer-video.mp4`: 1 s crossfade closes the loop (seam PSNR 20 → 31 dB),
+  colour shifted so the background matches the page lime (#b4fa38).
+- `next.config.ts`: `/videos/*` cached 1 year immutable (file names are versioned).
+  CSP unchanged (`default-src 'self'` covers same-origin media).
+- `.gitignore`: `/design/videos/` (source exports, 7 MB each).
+- Verified: lint, typecheck, production build, `pnpm verify` (all passed), video headers
+  (`video/mp4`, immutable, nosniff), headless Chrome 1440×900: WebM plays, opacity 1, rest of
+  section unchanged.
+
 ## 2026-11-22 — Google Flow campaign video prompts
 
 - `design/flow-campaign-videos.md`: 5 × 30 s vertical ad scripts (owner problem → lion mascot

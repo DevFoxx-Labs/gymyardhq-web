@@ -47,3 +47,4 @@ next-env.d.ts
 
 # raw AI video exports (large; compressed copies go in assets)
 /design/raw-videos/
+/design/videos/

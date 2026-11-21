@@ -4,6 +4,7 @@ import duoCutout from "@/assets/cutouts/owner-mascot-cutout.webp";
 import downloadScene from "@/assets/scenes/download.webp";
 import { site } from "@/config/site";
 import { Icon } from "../icon";
+import { SceneVideo } from "../motion/scene-video";
 import { CelebrationSparkles } from "../motion/sparkles";
 import { PlayStoreButton } from "../play-store-button";
 
@@ -12,7 +13,8 @@ import { PlayStoreButton } from "../play-store-button";
  * behaviour as the Finale: "STRONGER" sweeps in from the left behind the art,
  * "EVERY DAY." from the right in front of it. The owner × mascot high-five
  * slides in on the left (sparks burst where the hands meet), the flexing
- * lion scene slides in on the right and keeps swaying gently left–right.
+ * lion scene slides in on the right; once near the viewport its still image
+ * turns into a looping video (SceneVideo — the lion flexes and winks).
  * Static composition when motion is reduced or scroll timelines are missing.
  */
 export function DownloadFinale() {
@@ -31,12 +33,18 @@ export function DownloadFinale() {
           Stronger
         </p>
 
-        {/* right: flexing lion scene, swaying */}
+        {/* right: flexing lion scene — the still image becomes a looping video near the viewport */}
         <div aria-hidden className="dl-scene absolute bottom-0 right-0 z-10 hidden md:block md:h-[86%] md:w-[58%]">
           <div className="scene-fade-l absolute inset-0">
-            <div className="dl-sway absolute inset-0">
+            <SceneVideo
+              sources={[
+                { src: "/videos/download-lion-v1.webm", type: "video/webm" },
+                { src: "/videos/download-lion-v1.mp4", type: "video/mp4" },
+              ]}
+              videoClassName="object-cover object-[80%_20%]"
+            >
               <Image src={downloadScene} alt="" fill sizes="(min-width: 768px) 60vw, 100vw" className="object-cover object-[80%_20%]" />
-            </div>
+            </SceneVideo>
           </div>
         </div>
 
