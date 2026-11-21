@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { IconSvgElement } from "@hugeicons/react";
 import {
-  Calendar03Icon,
   ChartLineData01Icon,
   CheckmarkBadge01Icon,
   CloudSavingDone01Icon,
@@ -14,8 +13,6 @@ import {
   UserGroupIcon,
   WifiOff01Icon,
 } from "@hugeicons/core-free-icons";
-import downloadScene from "@/assets/scenes/download.webp";
-import downloadMobileScene from "@/assets/scenes/download-mobile.webp";
 import faqScene from "@/assets/scenes/faq.webp";
 import feesScene from "@/assets/scenes/fees.webp";
 import languageScene from "@/assets/scenes/language.webp";
@@ -34,13 +31,13 @@ import punchCutout from "@/assets/cutouts/punch-camera.webp";
 import waveA from "@/assets/cutouts/wave-hello-a.webp";
 import waveB from "@/assets/cutouts/wave-hello-b.webp";
 import { Hero } from "@/components/home/hero";
+import { DownloadFinale } from "@/components/home/download-finale";
 import { Finale } from "@/components/home/finale";
 import { OwnerSection } from "@/components/home/owner-section";
 import { Showcase } from "@/components/home/showcase";
 import { FrameLoop } from "@/components/motion/frame-loop";
 import { ScrollRunner } from "@/components/motion/scroll-runner";
 import { Icon } from "@/components/icon";
-import { PlayStoreButton } from "@/components/play-store-button";
 import { BlendedScene } from "@/components/scene/blended-scene";
 import { SceneTile } from "@/components/scene/scene-tile";
 import { site } from "@/config/site";
@@ -350,30 +347,8 @@ export default function HomePage() {
         </div>
       </BlendedScene>
 
-      {/* ───────────── DOWNLOAD (lime, full-bleed) ───────────── */}
-      <BlendedScene
-        id="download"
-        image={downloadScene}
-        mobileImage={downloadMobileScene}
-        tone="lime"
-        layout="full"
-        focus="78% 0%"
-        minHeight="clamp(520px, 46vw, 760px)"
-        mobileOverlap="small"
-      >
-        <h2 className="font-wide text-5xl font-black leading-[0.92] tracking-tight sm:text-7xl">
-          Stronger
-          <br />
-          every day.
-        </h2>
-        <p className="mt-5 max-w-md text-lg text-ink/75">
-          Download GymYardHQ and take control of your gym today — free, offline and private.
-        </p>
-        <PlayStoreButton size="lg" tone="dark" className="mt-8" />
-        <p className="mt-6 flex items-center gap-2 text-sm text-ink/70">
-          <Icon icon={Calendar03Icon} size={16} /> Android {site.app.minAndroid.replace("Android ", "")}+ · English & हिन्दी
-        </p>
-      </BlendedScene>
+      {/* ───────────── DOWNLOAD (lime, pinned finale) ───────────── */}
+      <DownloadFinale />
     </>
   );
 }

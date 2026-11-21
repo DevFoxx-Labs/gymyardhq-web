@@ -11,6 +11,7 @@
   --color-lime-deep: #8fd11a;
   /* exact lime of the generated CTA artwork, so it blends without a seam */
   --color-lime-scene: #b4fa38;
+  --color-beige: #f3e3c3;
   --color-text: #ffffff;
   --color-muted: #94a3b8;
   --color-active: #10b981;
@@ -235,6 +236,7 @@ body {
 
   .frame-a { animation: frame-a var(--frame-dur, 1s) infinite; }
   .frame-b { animation: frame-b var(--frame-dur, 1s) infinite; }
+  .dl-sway { animation: dl-sway 2.6s ease-in-out infinite; transform-origin: 70% 100%; }
   .motion-jump { animation: jump 1.6s cubic-bezier(0.3, 0.6, 0.3, 1) infinite; transform-origin: 50% 100%; }
   /* same 1.6 s clock as .motion-jump so the burst lands on every jump peak */
   .burst-spark { animation: burst-spark 1.6s cubic-bezier(0.25, 1, 0.5, 1) infinite; animation-delay: var(--lag, 0ms); }
@@ -338,6 +340,22 @@ body {
 }
 
 
+/* Download finale — pinned, lime; reuses the finale keyframes */
+.dl { view-timeline-name: --dl; }
+@keyframes dl-duo {
+  from { opacity: 0; transform: translateX(-45%) rotate(-6deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes dl-scene {
+  from { opacity: 0; transform: translateX(35%) scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes dl-sway {
+  /* the flexing lion rocks gently left–right */
+  0%, 100% { transform: translateX(-1.2%) rotate(-1.4deg); }
+  50% { transform: translateX(1.2%) rotate(1.4deg); }
+}
+
 /* Finale ("That's it. You're ready.") — pinned, full-height */
 .finale { view-timeline-name: --finale; }
 @keyframes fn-mascot {
@@ -377,6 +395,20 @@ body {
     .depth-copy { animation-name: depth-copy; }
     .depth-phone { animation-name: depth-phone; }
     .depth-bg { animation-name: depth-bg; transform-origin: 70% 40%; }
+
+    /* download finale */
+    .dl { height: 260vh; }
+    .dl-stage { position: sticky; top: 0; }
+    .dl-line1, .dl-line2, .dl-duo, .dl-scene, .dl-cta {
+      animation-timeline: --dl;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+    .dl-line1 { animation-name: fn-line1; animation-range: entry 55% contain 25%; }
+    .dl-scene { animation-name: dl-scene; animation-range: entry 45% contain 25%; }
+    .dl-duo { animation-name: dl-duo; animation-range: contain 10% contain 40%; }
+    .dl-line2 { animation-name: fn-line2; animation-range: contain 20% contain 50%; }
+    .dl-cta { animation-name: fn-cta; animation-range: contain 40% contain 65%; }
 
     /* finale */
     .finale { height: 280vh; }

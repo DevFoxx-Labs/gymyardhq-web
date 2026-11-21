@@ -1,5 +1,20 @@
 # Change log
 
+## 2026-11-21 — Download section as a pinned lime finale
+
+- New `components/home/download-finale.tsx` replaces the lime BlendedScene: 260vh section,
+  sticky lime stage (view timeline `--dl`). "STRONGER" (behind the art) sweeps in from the
+  left and "EVERY DAY." (in front) from the right with de-blur — same behaviour as the
+  "That's it. You're ready." finale. Owner × mascot high-five cutout slides in on the left with
+  a sparkle burst at the hands; the flexing-lion scene slides in on the right (left edge
+  dissolved) and sways gently left–right (`dl-sway`, 2.6 s); CTA + Google Play in the middle.
+  Phones: flex scene hidden, high-five centred under the CTA.
+- Static composition with reduced motion / without scroll timelines.
+- Skills synced: `apple-scroll-parallax` (pattern 4 + component + css), `mascot-scroll-motion`
+  (css), `gymyard-landing-kit` (template, manifest).
+- Verified on a separate build at 1440×900 and 390×844; sway transform changes over time; no
+  horizontal scroll; lint, typecheck, `pnpm verify` pass.
+
 ## 2026-11-21 — Design + animations packaged as global skills
 
 - Three global skills in `~/.claude/skills/`:
