@@ -24,12 +24,32 @@ export function isPlaceholder(value: string): boolean {
 
 const packageId = "com.devfoxxlabs.gymyardhq";
 
+/**
+ * Public origin of the site. Fails closed: a production build/start without
+ * SITE_URL would publish localhost canonicals, sitemap and OG URLs, so it
+ * throws instead. Dev falls back to localhost.
+ */
+function siteUrl(): string {
+  const value = process.env.SITE_URL?.trim().replace(/\/+$/, "");
+  if (value) return value;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("SITE_URL is not set. Set it to the public origin (e.g. https://gymyardhq.com) before building.");
+  }
+  return "http://localhost:3000";
+}
+
 export const site = {
   name: "GymYardHQ",
   tagline: "Run your gym like a pro",
   description:
     "GymYardHQ is an offline-first gym management app for gym owners in India — members, fees, UPI bills, PDF receipts with QR verification, reminders and reports. Your data stays on your phone.",
-  url: env("SITE_URL", "http://localhost:3000").replace(/\/+$/, ""),
+  /** <title> of the home page (≤ 60 chars) and the default SEO description (≤ 155 chars). */
+  seoTitle: "GymYardHQ: Gym Management App for Gym Owners in India",
+  seoDescription:
+    "Free gym management app for India. Track members, collect fees with UPI bills, send PDF receipts and fee reminders. Works offline, in English and Hindi.",
+  url: siteUrl(),
+  /** Last meaningful change to the marketing pages (sitemap lastmod). */
+  contentUpdated: "2026-11-21",
   copyrightYear: 2026,
 
   company: {

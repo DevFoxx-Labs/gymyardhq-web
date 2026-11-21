@@ -25,3 +25,10 @@ Never ticked off without the owner's confirmation.
 - [ ] Check the logo inside `design/play-feature-graphic-1024x500.png` and
       `app/opengraph-image.jpg` against the official logo — AI tools can alter lettering.
       If anything differs, place the real logo PNG over it and replace the files.
+
+## 2026-11-21 — SEO launch steps
+
+- [ ] Set `SITE_URL` in the hosting environment (the build now fails without it).
+- [ ] Verify the domain in Google Search Console and Bing Webmaster Tools; submit `/sitemap.xml`.
+- [ ] After the Play listing is live, set `PLAY_STORE_LIVE=true` (adds the Play URL to the app and organization schema).
+- [ ] Run PageSpeed Insights on the live home page (mobile) and share the numbers.

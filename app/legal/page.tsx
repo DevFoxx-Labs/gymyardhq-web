@@ -3,18 +3,21 @@ import Link from "next/link";
 import { ArrowRight01Icon, CustomerSupportIcon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/icon";
 import { legalRegistry } from "@/content/legal";
+import { breadcrumbSchema, graph, JsonLd } from "@/components/seo/json-ld";
+import { pageMeta } from "@/lib/seo";
 
 export const ensureStatic = "navigation";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Legal & Privacy",
-  description: "Privacy Policy, Terms of Service, data deletion steps and Cookie Policy for the GymYardHQ app and website.",
-  alternates: { canonical: "/legal" },
-};
+  description: "Privacy Policy, Terms of Service, data deletion steps and Cookie Policy for the GymYardHQ gym management app and website.",
+  path: "/legal",
+});
 
 export default function LegalIndexPage() {
   return (
     <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+      <JsonLd data={graph(breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Legal", path: "/legal" }]))} />
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-lime">Legal &amp; Privacy</p>
       <h1 className="font-wide mt-3 text-4xl font-extrabold tracking-tight sm:text-5xl">Plain-language policies</h1>
       <p className="mt-4 max-w-2xl text-muted">

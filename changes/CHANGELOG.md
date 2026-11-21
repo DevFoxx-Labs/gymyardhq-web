@@ -1,5 +1,37 @@
 # Change log
 
+## 2026-11-21 — Fix dev "URL data during prerendering" insight on slug routes
+
+- `/legal/[slug]`, `/legal/[slug]/hi`, `/features/[slug]` read `params` for the whole page, which
+  Next 16 (cacheComponents + partialPrefetching) flags in dev. Added `export const instant = false`
+  (the documented "allow blocking route" fix) instead of a Suspense split, so unknown slugs keep a
+  real 404 (no soft-404) and every known slug stays fully prerendered (○ in build output).
+- Verified: build, `pnpm verify` (incl. 404 checks), `/features/nope` → 404. Kit template synced.
+
+## 2026-11-21 — SEO fixes
+
+- **SITE_URL fails closed**: production build throws without it (was silently `localhost:3000`
+  in canonicals, og:url, sitemap, robots).
+- `lib/seo.ts` `pageMeta()` on every page: own canonical + og:url (layout no longer forces
+  `og:url: "/"`), og/twitter title + description, hreflang with `x-default`; Hindi pages get
+  `og:locale hi_IN`.
+- JSON-LD (`components/seo/json-ld.tsx`, `<>&` hex-escaped): Organization + WebSite +
+  MobileApplication (free, Android, BusinessApplication, feature list) on home; BreadcrumbList
+  on legal, contact and feature pages.
+- Home title "GymYardHQ: Gym Management App for Gym Owners in India" (53) and description (152
+  chars); keyword eyebrows ("Gym fee reminders", "Gym fees & UPI billing", …); descriptive alt
+  on 15 scene images; "More about …" internal links.
+- 4 feature landing pages `/features/{gym-fee-reminders, upi-gym-billing, gym-receipt-app,
+  gym-member-management}` (`content/features.ts`, facts from the app), linked from home and a new
+  footer "Features" column; LCP scene loads eagerly (`BlendedScene eager`).
+- `sitemap.xml` with lastmod on every URL, hreflang alternates for legal EN/HI, feature pages;
+  `manifest.webmanifest`; `/llms.txt`.
+- `scripts/verify.mjs`: SEO checks (og:url = canonical, one h1, JSON-LD on every page, Hindi
+  x-default + og:locale, app schema, llms.txt, manifest, optional `EXPECT_SITE_URL`).
+- Verified: build without SITE_URL fails; with `SITE_URL=https://gymyardhq.example` lint,
+  typecheck, build and `pnpm verify` (all SEO checks) pass; feature page screenshots at
+  1440×900 and 390×844.
+
 ## 2026-11-21 — Download section as a pinned lime finale
 
 - New `components/home/download-finale.tsx` replaces the lime BlendedScene: 260vh section,

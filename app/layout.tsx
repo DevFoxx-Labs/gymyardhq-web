@@ -24,10 +24,10 @@ const hind = Hind({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — Gym Management App for Gym Owners`,
+    default: site.seoTitle,
     template: `%s · ${site.name}`,
   },
-  description: site.description,
+  description: site.seoDescription,
   applicationName: site.name,
   keywords: [
     "gym management app",
@@ -42,7 +42,6 @@ export const metadata: Metadata = {
     type: "website",
     siteName: site.name,
     locale: "en_IN",
-    url: "/",
   },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },

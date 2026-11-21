@@ -21,6 +21,8 @@ type Props = {
   /** Accessible description; leave empty when the image is decorative. */
   alt?: string;
   minHeight?: string;
+  /** Top-of-page scene (LCP): load eagerly with high priority. */
+  eager?: boolean;
   /** Pull the copy up over the faded bottom of the phone artwork (default) or keep it below. */
   mobileOverlap?: "default" | "small";
   className?: string;
@@ -42,6 +44,7 @@ export function BlendedScene({
   id,
   alt = "",
   minHeight = "clamp(560px, 50vw, 820px)",
+  eager = false,
   mobileOverlap = "default",
   className = "",
   children,
@@ -62,7 +65,7 @@ export function BlendedScene({
         className="scene-fade-b relative w-full md:hidden"
         style={{ aspectRatio: `${mobile.width} / ${mobile.height}` }}
       >
-        <Image src={mobile} alt={alt} fill sizes="100vw" placeholder="blur" className="object-cover" />
+        <Image src={mobile} alt={alt} fill sizes="100vw" placeholder="blur" className="object-cover" {...(eager ? { loading: "eager", fetchPriority: "high" } : {})} />
       </div>
 
       {/* Desktop: artwork dissolving into the page on its inner edge */}
@@ -76,6 +79,7 @@ export function BlendedScene({
           placeholder="blur"
           className="object-cover"
           style={{ objectPosition: focus }}
+          {...(eager ? { loading: "eager", fetchPriority: "high" } : {})}
         />
         </div>
       </div>

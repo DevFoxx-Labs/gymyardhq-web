@@ -10,14 +10,16 @@ import supportScene from "@/assets/scenes/support.webp";
 import { Icon } from "@/components/icon";
 import { BlendedScene } from "@/components/scene/blended-scene";
 import { isPlaceholder, site } from "@/config/site";
+import { pageMeta } from "@/lib/seo";
+import { breadcrumbSchema, graph, JsonLd } from "@/components/seo/json-ld";
 
 export const ensureStatic = "navigation";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Contact & Grievance Officer",
-  description: "Get help with GymYardHQ, make a privacy request or raise a grievance under India's DPDP Act.",
-  alternates: { canonical: "/contact" },
-};
+  description: "Get help with the GymYardHQ gym management app, make a privacy request or raise a grievance under India's DPDP Act.",
+  path: "/contact",
+});
 
 function Email({ value, subject }: { value: string; subject?: string }) {
   if (isPlaceholder(value)) {
@@ -34,7 +36,8 @@ function Email({ value, subject }: { value: string; subject?: string }) {
 export default function ContactPage() {
   return (
     <>
-      <BlendedScene image={supportScene} focus="70% 40%" minHeight="clamp(460px, 40vw, 640px)">
+      <JsonLd data={graph(breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }]))} />
+      <BlendedScene eager image={supportScene} focus="70% 40%" minHeight="clamp(460px, 40vw, 640px)">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-lime">Support</p>
         <h1 className="font-wide mt-3 text-4xl font-extrabold tracking-tight sm:text-5xl">We&apos;re here to help</h1>
         <p className="mt-4 text-lg leading-relaxed text-white/70">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { isPlaceholder, site } from "@/config/site";
+import { featurePages } from "@/content/features";
 import { legalRegistry } from "@/content/legal";
 import pushupA from "@/assets/cutouts/pushup-a.webp";
 import pushupB from "@/assets/cutouts/pushup-b.webp";
@@ -9,7 +10,7 @@ import { FrameLoop } from "./motion/frame-loop";
 export function SiteFooter() {
   return (
     <footer className="border-t border-line bg-ink">
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 pb-24 pt-14 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-6xl gap-10 px-5 pb-24 pt-14 sm:grid-cols-2 lg:grid-cols-5">
         <div className="space-y-4 lg:col-span-2">
           <BrandMark />
           <p className="max-w-sm text-sm leading-relaxed text-muted">
@@ -27,6 +28,19 @@ export function SiteFooter() {
               {site.company.brand}
             </a>
           </p>
+        </div>
+
+        <div>
+          <h2 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-muted">Features</h2>
+          <ul className="space-y-2.5 text-sm">
+            {featurePages.map((f) => (
+              <li key={f.slug}>
+                <Link href={`/features/${f.slug}`} className="text-white/80 hover:text-lime">
+                  {f.eyebrow}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div>

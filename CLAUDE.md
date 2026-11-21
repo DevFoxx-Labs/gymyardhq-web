@@ -42,6 +42,16 @@ database safety, engineering workflow, web performance). Project-specific points
 - Hero uses art direction (`getImageProps` + `<picture>`), eager + `fetchPriority="high"`;
   everything else is lazy.
 
+## SEO
+- Production builds require `SITE_URL` (fails closed in `config/site.ts`).
+- Every page builds metadata with `pageMeta()` (`lib/seo.ts`): own canonical, og:url, title,
+  description, hreflang incl. x-default. Never set `openGraph.url` in the layout.
+- Structured data via `components/seo/json-ld.tsx` (hex-escaped JSON): home = Organization +
+  WebSite + MobileApplication; inner pages = BreadcrumbList. No FAQPage (no Google benefit).
+- Feature landing pages live in `content/features.ts` (one search intent each, facts must match
+  the app). New public pages go into `app/sitemap.ts` and `llms.txt` automatically or by hand.
+- Scene images that carry meaning get descriptive `alt`; purely decorative ones stay `alt=""`.
+
 ## Legal content — one source
 - All notices live in `content/legal/*.ts` with `version` + `lastUpdated`. Pages (`/legal/[slug]`,
   `/legal/[slug]/hi`) and the JSON API (`/api/legal`, `/api/legal/[slug]`) both read them.
@@ -58,8 +68,8 @@ database safety, engineering workflow, web performance). Project-specific points
 ## Verify before "done"
 ```
 pnpm lint && pnpm typecheck
-NEXT_DIST_DIR=.next-verify pnpm build            # never build into .next while `pnpm dev` runs
-NEXT_DIST_DIR=.next-verify pnpm start -p 3417    # separate terminal
+SITE_URL=https://gymyardhq.example NEXT_DIST_DIR=.next-verify pnpm build   # never into .next while `pnpm dev` runs
+SITE_URL=https://gymyardhq.example NEXT_DIST_DIR=.next-verify pnpm start -p 3417
 BASE_URL=http://localhost:3417 pnpm verify
 ```
 Record each task in `changes/CHANGELOG.md`; gaps in `docs/known-gaps.md`; owner steps in

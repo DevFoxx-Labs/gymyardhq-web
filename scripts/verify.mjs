@@ -26,6 +26,10 @@ async function get(path, init) {
 
 const pages = [
   "/",
+  "/features/gym-fee-reminders",
+  "/features/upi-gym-billing",
+  "/features/gym-receipt-app",
+  "/features/gym-member-management",
   "/legal",
   "/legal/privacy-policy",
   "/legal/privacy-policy/hi",
@@ -55,6 +59,27 @@ for (const path of pages) {
     check(/Version|संस्करण/.test(html) && /2026-\d\d-\d\d/.test(html), `${path} shows version + date`);
   }
   if (path.endsWith("/hi")) check(/lang="hi"/.test(html), `${path} is marked lang="hi"`);
+}
+
+console.log("\nSEO");
+for (const path of pages) {
+  const html = await (await get(path)).text();
+  const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1] ?? "";
+  const ogUrl = html.match(/<meta property="og:url" content="([^"]+)"/)?.[1] ?? "";
+  check(Boolean(canonical) && canonical === ogUrl, `${path} og:url equals canonical`);
+  check((html.match(/<h1[\s>]/g) ?? []).length === 1, `${path} has exactly one <h1>`);
+  check(/<script type="application\/ld\+json">/.test(html), `${path} has JSON-LD`);
+}
+{
+  const hi = await (await get("/legal/privacy-policy/hi")).text();
+  check(/hrefLang="x-default"/.test(hi) && /og:locale" content="hi_IN"/.test(hi), "Hindi page: x-default hreflang + og:locale hi_IN");
+  const home = await (await get("/")).text();
+  check(/"MobileApplication"/.test(home) && /"Organization"/.test(home), "home has MobileApplication + Organization schema");
+  check((await get("/llms.txt")).status === 200, "/llms.txt → 200");
+  if (process.env.EXPECT_SITE_URL) {
+    const canonical = home.match(/<link rel="canonical" href="([^"]+)"/)?.[1] ?? "";
+    check(canonical.startsWith(process.env.EXPECT_SITE_URL), `canonical starts with EXPECT_SITE_URL (${canonical})`);
+  }
 }
 
 console.log("\nNot found");
@@ -113,6 +138,7 @@ console.log("\nImages, SEO");
 for (const [path, type] of [
   ["/sitemap.xml", "xml"],
   ["/robots.txt", "text/plain"],
+  ["/manifest.webmanifest", "application/manifest+json"],
 ]) {
   const res = await get(path);
   check(res.status === 200 && (res.headers.get("content-type") ?? "").includes(type), `${path} → ${type}`);

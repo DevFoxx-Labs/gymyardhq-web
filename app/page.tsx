@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { IconSvgElement } from "@hugeicons/react";
 import {
+  ArrowRight01Icon,
   ChartLineData01Icon,
   CheckmarkBadge01Icon,
   CloudSavingDone01Icon,
@@ -40,13 +41,13 @@ import { ScrollRunner } from "@/components/motion/scroll-runner";
 import { Icon } from "@/components/icon";
 import { BlendedScene } from "@/components/scene/blended-scene";
 import { SceneTile } from "@/components/scene/scene-tile";
+import { appSchema, graph, JsonLd, organizationSchema, websiteSchema } from "@/components/seo/json-ld";
 import { site } from "@/config/site";
+import { pageMeta } from "@/lib/seo";
 
 export const ensureStatic = "navigation";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
+export const metadata: Metadata = pageMeta({ description: site.seoDescription, path: "/" });
 
 const marquee = ["Members", "Fees", "UPI Bills", "PDF Receipts", "QR Verify", "Reminders", "Reports", "Trainers", "Expenses", "Backups"];
 
@@ -66,6 +67,9 @@ type Chapter = {
   title: string;
   body: string;
   points: string[];
+  alt: string;
+  /** Feature landing page for this chapter. */
+  href?: string;
 };
 
 const chapters: Chapter[] = [
@@ -73,7 +77,9 @@ const chapters: Chapter[] = [
     id: "features",
     image: membersScene,
     focus: "60% 50%",
-    eyebrow: "Members",
+    eyebrow: "Gym member management",
+    alt: "GymYardHQ lion mascot checking in gym members at the front desk",
+    href: "/features/gym-member-management",
     icon: UserGroupIcon,
     title: "Every member, one tap away.",
     body: "Photo, phone, plan, trainer and full change history for every member — with call, SMS and WhatsApp a tap away.",
@@ -82,7 +88,9 @@ const chapters: Chapter[] = [
   {
     image: feesScene,
     focus: "60% 50%",
-    eyebrow: "Fees & UPI",
+    eyebrow: "Gym fees & UPI billing",
+    alt: "GymYardHQ lion mascot collecting gym fees by UPI on a phone",
+    href: "/features/upi-gym-billing",
     icon: Coins01Icon,
     title: "Collect fees the way India pays.",
     body: "Record a payment and share a bill with a UPI QR — members pay with GPay, PhonePe, Paytm or BHIM straight to your account. Then send a numbered PDF receipt.",
@@ -91,7 +99,9 @@ const chapters: Chapter[] = [
   {
     image: remindersScene,
     focus: "55% 45%",
-    eyebrow: "Reminders",
+    eyebrow: "Gym fee reminders",
+    alt: "GymYardHQ lion mascot reading fee-due reminders on a phone",
+    href: "/features/gym-fee-reminders",
     icon: Notification03Icon,
     title: "Dues don't slip anymore.",
     body: "Automatic due-today, due-soon and expiry alerts on your phone, plus ready-made SMS and WhatsApp messages to send in one tap.",
@@ -100,7 +110,8 @@ const chapters: Chapter[] = [
   {
     image: reportsScene,
     focus: "70% 50%",
-    eyebrow: "Dashboard & reports",
+    eyebrow: "Gym dashboard & reports",
+    alt: "GymYardHQ lion mascot presenting gym revenue charts",
     icon: ChartLineData01Icon,
     title: "Know your numbers.",
     body: "See active, due and overdue members at a glance. Track revenue, expenses and trainer payouts with clear charts.",
@@ -111,30 +122,35 @@ const chapters: Chapter[] = [
 const tiles = [
   {
     image: receiptsScene,
+    alt: "GymYardHQ lion mascot scanning a receipt QR code",
+    href: "/features/gym-receipt-app",
     title: "Tamper-proof receipts",
     body: "Every receipt carries a tamper-check QR code. Scan it in the app to verify — even offline.",
   },
   {
     image: trainersScene,
+    alt: "GymYardHQ lion mascot spotting a gym member on the bench press",
     title: "Trainers & expenses",
     body: "Assign trainers, track their payouts, and keep every gym expense in one place.",
   },
   {
     image: securityScene,
+    alt: "GymYardHQ lion mascot guarding a vault with a fingerprint lock",
     title: "Locked like a vault",
     body: "MPIN plus fingerprint or face unlock. Encrypted backups you can restore on a new phone.",
   },
   {
     image: languageScene,
+    alt: "GymYardHQ lion mascot waving at the entrance of an Indian gym",
     title: "English & हिन्दी",
     body: "Switch the whole app to Hindi in Settings. Your gym logo and details on every bill and receipt.",
   },
 ];
 
 const steps = [
-  { image: step1Scene, title: "Set up in 2 minutes", body: "Add your gym name and logo, create an MPIN and turn on fingerprint unlock. No sign-up, no server." },
-  { image: step2Scene, title: "Add plans & members", body: "Create monthly, quarterly or yearly plans and packages, then add members with their photo and trainer." },
-  { image: step3Scene, title: "Collect & remind", body: "Share a bill with a UPI QR, issue a PDF receipt, and let reminders chase the dues for you." },
+  { image: step1Scene, alt: "Lion mascot chalking hands before training", title: "Set up in 2 minutes", body: "Add your gym name and logo, create an MPIN and turn on fingerprint unlock. No sign-up, no server." },
+  { image: step2Scene, alt: "Lion mascot high-fiving a new gym member", title: "Add plans & members", body: "Create monthly, quarterly or yearly plans and packages, then add members with their photo and trainer." },
+  { image: step3Scene, alt: "Lion mascot lifting a heavy deadlift in triumph", title: "Collect & remind", body: "Share a bill with a UPI QR, issue a PDF receipt, and let reminders chase the dues for you." },
 ];
 
 const faqs = [
@@ -162,6 +178,7 @@ function Eyebrow({ children, className = "text-lime" }: { children: ReactNode; c
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={graph(organizationSchema(), websiteSchema(), appSchema())} />
       <Hero />
       <ScrollRunner />
 
@@ -204,7 +221,7 @@ export default function HomePage() {
         <div aria-hidden className="punch-in pointer-events-none absolute -right-6 -top-10 hidden w-[230px] lg:block xl:-right-16 xl:w-[290px]">
           <Image src={punchCutout} alt="" sizes="290px" className="h-auto w-full drop-shadow-[0_30px_40px_rgb(0_0_0/0.6)]" />
         </div>
-        <Eyebrow>Features</Eyebrow>
+        <Eyebrow>Gym management app features</Eyebrow>
         <h2 className="font-wide mx-auto mt-3 max-w-3xl text-4xl font-black tracking-tight sm:text-6xl">
           Less paperwork. <span className="text-lime">More reps.</span>
         </h2>
@@ -212,7 +229,7 @@ export default function HomePage() {
       </div>
 
       {chapters.map((c) => (
-        <BlendedScene key={c.title} id={c.id} image={c.image} focus={c.focus} imageSide="right">
+        <BlendedScene key={c.title} id={c.id} image={c.image} alt={c.alt} focus={c.focus} imageSide="right">
           <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-lime text-ink">
             <Icon icon={c.icon} size={22} />
           </span>
@@ -227,6 +244,11 @@ export default function HomePage() {
               </li>
             ))}
           </ul>
+          {c.href && (
+            <Link href={c.href} className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-lime hover:underline hover:underline-offset-4">
+              More about {c.eyebrow.toLowerCase()} <Icon icon={ArrowRight01Icon} size={16} />
+            </Link>
+          )}
         </BlendedScene>
       ))}
 
@@ -248,9 +270,14 @@ export default function HomePage() {
         </div>
         <div className="mt-2 grid gap-x-4 gap-y-10 md:grid-cols-2">
           {tiles.map((t) => (
-            <SceneTile key={t.title} image={t.image}>
+            <SceneTile key={t.title} image={t.image} alt={t.alt}>
               <h3 className="text-2xl font-bold">{t.title}</h3>
               <p className="mt-2 max-w-md leading-relaxed text-white/70">{t.body}</p>
+              {t.href && (
+                <Link href={t.href} className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-lime hover:underline hover:underline-offset-4">
+                  How receipts work <Icon icon={ArrowRight01Icon} size={16} />
+                </Link>
+              )}
             </SceneTile>
           ))}
         </div>
@@ -261,13 +288,13 @@ export default function HomePage() {
         <div aria-hidden className="bg-plate absolute left-1/2 top-1/3 h-[900px] w-[900px] -translate-x-1/2 rounded-full opacity-60" />
         <div className="relative mx-auto max-w-6xl px-5">
           <div className="text-center">
-            <Eyebrow>How it works</Eyebrow>
+            <Eyebrow>How the gym app works</Eyebrow>
             <h2 className="font-wide mt-3 text-4xl font-black tracking-tight sm:text-6xl">Three sets. Done.</h2>
           </div>
           <ol className="mt-4 grid gap-y-12 md:grid-cols-3 md:gap-x-2">
             {steps.map((s, i) => (
               <li key={s.title} className="reveal" style={{ "--i": i } as CSSProperties}>
-                <SceneTile image={s.image} ratio="square" sizes="(min-width: 768px) 34vw, 100vw">
+                <SceneTile image={s.image} alt={s.alt} ratio="square" sizes="(min-width: 768px) 34vw, 100vw">
                   <span className="font-wide flex h-12 w-12 items-center justify-center rounded-2xl bg-lime text-xl font-black text-ink">
                     {i + 1}
                   </span>
@@ -320,7 +347,7 @@ export default function HomePage() {
 
       {/* ───────────── FAQ ───────────── */}
       <BlendedScene id="faq" image={faqScene} imageSide="left" focus="20% 50%" mobileOverlap="small" minHeight="clamp(620px, 54vw, 880px)">
-        <Eyebrow>FAQ</Eyebrow>
+        <Eyebrow>Gym app FAQ</Eyebrow>
         <h2 className="font-wide mt-3 text-4xl font-black tracking-tight">Questions, answered.</h2>
         <div className="mt-8 divide-y divide-white/10 border-y border-white/10">
           {faqs.map((f) => (
