@@ -44,3 +44,6 @@ next-env.d.ts
 # raw AI images for cutouts (large source files; outputs go to assets/cutouts)
 /design/raw-cutouts/
 /.next-verify/
+
+# raw AI video exports (large; compressed copies go in assets)
+/design/raw-videos/

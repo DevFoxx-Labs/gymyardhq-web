@@ -1,5 +1,24 @@
 # Change log
 
+## 2026-11-22 — Google Flow campaign video prompts
+
+- `design/flow-campaign-videos.md`: 5 × 30 s vertical ad scripts (owner problem → lion mascot
+  solution → CTA), each split into 3 continuous clips with Veo/Flow prompts, a fixed character
+  bible (owner + lion look, voices), start-frame image prompts, hooks with A/B variants, on-screen
+  text, edit/end-card guide, captions and a pre-posting checklist. Claims checked against
+  `content/features.ts` (reminders prepare messages, they don't send them automatically). Docs only,
+  so no code checks were run.
+- `design/flow-prompts-copy.md`: the same 20 prompts (5 start frames + 15 clips) fully expanded
+  with the character bible, one copyable block each. Generated from `flow-campaign-videos.md`.
+- Added lion hard rules (no tail, five fingers, stable face/mane/"G" emblem, no morphing) and
+  anti-glitch rules to every prompt. Prompts in `flow-campaign-videos.md` are now fully expanded
+  too, with a full start-frame prompt in each campaign. Added tail and glitch rows to troubleshooting.
+- `design/flow-website-videos.md`: copy-paste Flow prompts for 15 s silent seamless-loop videos —
+  hero desktop (16:9), hero mobile (9:16) and the download section (16:9, desktop only). Two parts
+  each (Frames to Video; Part B ends on the original scene image to close the loop), text-safe
+  empty zones, lion hard rules, export and web-performance plan (poster stays LCP).
+  `/design/raw-videos/` added to `.gitignore`.
+
 ## 2026-11-21 — Fix dev "URL data during prerendering" insight on slug routes
 
 - `/legal/[slug]`, `/legal/[slug]/hi`, `/features/[slug]` read `params` for the whole page, which
