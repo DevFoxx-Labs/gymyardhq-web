@@ -26,7 +26,7 @@ export function DownloadFinale() {
         {/* line 1 — behind the art */}
         <p
           aria-hidden
-          className="dl-line1 font-wide absolute inset-x-0 top-[11vh] z-0 whitespace-nowrap text-center text-[12.8vw] font-black uppercase leading-none tracking-tight md:top-[9vh]"
+          className="dl-line1 font-wide absolute inset-x-0 top-[11vh] z-0 whitespace-nowrap text-center text-[min(12.8vw,22vh)] font-black uppercase leading-none tracking-tight md:top-[9vh]"
         >
           Stronger
         </p>
@@ -53,7 +53,7 @@ export function DownloadFinale() {
         </div>
 
         {/* call to action — centre */}
-        <div className="dl-cta absolute inset-x-0 top-[26vh] z-20 mx-auto max-w-sm px-5 text-center md:left-[37vw] md:right-auto md:top-[29vh] md:w-[23vw] md:max-w-none md:px-0 md:text-left">
+        <div className="dl-cta absolute inset-x-0 top-[26vh] z-20 mx-auto max-w-sm px-5 text-center md:left-[37vw] md:right-auto md:top-[calc(9vh+min(12.8vw,22vh)+3vh)] md:w-[23vw] md:max-w-none md:px-0 md:text-left">
           <p className="text-lg font-medium leading-relaxed text-ink/80">
             Download {site.name} and take control of your gym today — free, offline and private.
           </p>
@@ -66,7 +66,7 @@ export function DownloadFinale() {
         {/* line 2 — in front of the art */}
         <p
           aria-hidden
-          className="dl-line2 font-wide absolute inset-x-0 bottom-[3vh] z-20 whitespace-nowrap text-center text-[12.2vw] font-black uppercase leading-none tracking-tight text-beige drop-shadow-[0_6px_18px_color-mix(in_oklab,var(--color-ink)_55%,transparent)]"
+          className="dl-line2 font-wide absolute inset-x-0 bottom-[3vh] z-20 whitespace-nowrap text-center text-[min(12.2vw,21vh)] font-black uppercase leading-none tracking-tight text-beige drop-shadow-[0_6px_18px_color-mix(in_oklab,var(--color-ink)_55%,transparent)]"
         >
           Every day.
         </p>
