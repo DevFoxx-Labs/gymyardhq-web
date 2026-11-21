@@ -14,7 +14,7 @@ type Spark = {
 };
 
 const TONE: Record<Spark["tone"], string> = {
-  lime: "#b5f63d",
+  lime: "var(--color-lime)",
   white: "#ffffff",
   gold: "#ffd54a",
 };

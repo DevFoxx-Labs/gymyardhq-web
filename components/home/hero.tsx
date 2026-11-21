@@ -43,7 +43,7 @@ export function Hero() {
       <div
         aria-hidden
         className="absolute inset-y-0 left-0 -z-10 hidden w-[70%] md:block"
-        style={{ backgroundImage: "linear-gradient(to right, var(--color-ink) 0%, var(--color-ink) 22%, rgb(11 12 16 / 0.7) 55%, transparent 100%)" }}
+        style={{ backgroundImage: "linear-gradient(to right, var(--color-ink) 0%, var(--color-ink) 22%, color-mix(in oklab, var(--color-ink) 70%, transparent) 55%, transparent 100%)" }}
       />
       <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-ink to-transparent" />
 

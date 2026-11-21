@@ -40,7 +40,7 @@ export function PhoneMockup({ className = "" }: { className?: string }) {
     <div
       role="img"
       aria-label="GymYardHQ dashboard showing member counts, dues and recent payments"
-      className={`relative aspect-[9/19] w-[280px] rounded-[2.75rem] border border-white/10 bg-[#050608] p-2.5 shadow-[0_40px_120px_-20px_rgba(181,246,61,0.25)] ${className}`}
+      className={`relative aspect-[9/19] w-[280px] rounded-[2.75rem] border border-white/10 bg-[#050608] p-2.5 shadow-[0_40px_120px_-20px_color-mix(in_oklab,var(--color-lime)_25%,transparent)] ${className}`}
     >
       <div aria-hidden className="relative flex h-full flex-col overflow-hidden rounded-[2.2rem] bg-ink">
         {/* status bar */}

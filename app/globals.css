@@ -89,7 +89,7 @@ body {
   background: repeating-radial-gradient(
     circle at center,
     transparent 0 38px,
-    rgb(181 246 61 / 0.08) 38px 39px
+    color-mix(in oklab, var(--color-lime) 8%, transparent) 38px 39px
   );
 }
 
@@ -220,7 +220,7 @@ body {
 /* Burst pieces only exist while animating. */
 .burst-spark, .burst-flash { opacity: 0; }
 .burst-flash {
-  background: radial-gradient(circle, rgb(255 255 255 / 0.95) 0%, rgb(181 246 61 / 0.55) 35%, transparent 70%);
+  background: radial-gradient(circle, rgb(255 255 255 / 0.95) 0%, color-mix(in oklab, var(--color-lime) 55%, transparent) 35%, transparent 70%);
 }
 
 /* Second animation frame is hidden unless motion is allowed. */
