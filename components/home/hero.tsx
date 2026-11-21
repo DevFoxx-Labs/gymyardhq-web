@@ -59,33 +59,44 @@ export function Hero() {
       />
       <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-ink to-transparent" />
 
-      <div className="relative mx-auto max-w-6xl px-5 pt-12 sm:pt-16 md:flex md:min-h-[clamp(620px,52vw,860px)] md:items-center md:py-20">
-        {/* depth layer: fastest — copy rises and fades first */}
-        <div className="depth-copy max-w-xl">
-          {/* Same feel as "STRONGER / EVERY DAY.": lines sweep in from opposite sides
-              with a blur on load, and split apart again as the hero scrolls away.
-              Outer span = scroll exit, inner span = load entrance (no transform clash). */}
-          <p className="hero-out-l">
-            <span className="hero-in-l inline-flex items-center gap-2 rounded-full border border-white/10 bg-ink/60 px-3 py-1.5 text-xs text-muted backdrop-blur">
-              <span className="h-1.5 w-1.5 rounded-full bg-lime" />
-              Gym management app · Made for India
+      {/* Same look as "STRONGER / EVERY DAY.": full-width display lines (sized to fill
+          ~93vw, capped by height), sweeping in from opposite sides with a blur on load and
+          splitting apart again as the hero scrolls away. Outer span = scroll exit, inner
+          span = load entrance, so the transforms never clash. Visual lines are aria-hidden;
+          the h1 carries the same words for assistive tech and search. */}
+      <h1 className="sr-only">Run your gym like a pro. Gym management app.</h1>
+
+      <div className="relative flex min-h-[calc(100svh-4rem)] flex-col md:min-h-[max(640px,calc(100dvh-4rem))]">
+        {/* top: eyebrow + line 1 */}
+        <div aria-hidden className="pt-8 text-center md:pt-[4vh]">
+          <p className="hero-out-l whitespace-nowrap">
+            <span className="hero-in-l font-wide inline-flex items-center gap-[0.55em] text-[min(3.6vw,6.2vh)] font-bold uppercase tracking-[0.3em] text-white/75">
+              <span className="h-[0.42em] w-[0.42em] shrink-0 rounded-full bg-lime" />
+              Gym management app
             </span>
           </p>
-
-          <h1 className="font-wide mt-6 text-[2.6rem] font-black leading-[0.95] tracking-tight sm:text-6xl xl:text-[4.1rem]">
-            <span className="hero-out-l block">
-              <span className="hero-in-l block sm:whitespace-nowrap" style={{ "--d": "120ms" } as CSSProperties}>
+          {/* Line 1 crosses the mascot's face on wide screens. Like the finale's line that
+              sits behind the mascot, it turns to glass there: the solid fill fades out over
+              the scene (.hero-ghost) and a thin outline takes over (.hero-ghost-stroke),
+              so the face stays visible through the letters. */}
+          <p className="hero-out-l mt-[1.2vh] whitespace-nowrap">
+            <span
+              className="hero-in-l font-wide relative block text-[min(9.2vw,15.8vh)] font-black uppercase leading-[0.9] tracking-tight"
+              style={{ "--d": "120ms" } as CSSProperties}
+            >
+              <span className="hero-ghost block drop-shadow-[0_6px_18px_rgb(0_0_0/0.55)]">Run your gym</span>
+              <span className="hero-ghost-stroke absolute inset-0 hidden text-transparent [-webkit-text-stroke:1.5px_rgb(255_255_255/0.7)] md:block">
                 Run your gym
               </span>
             </span>
-            <span className="hero-out-r block">
-              <span className="hero-in-r block text-lime" style={{ "--d": "300ms" } as CSSProperties}>
-                like a pro.
-              </span>
-            </span>
-          </h1>
+          </p>
+        </div>
 
-          <p className="motion-rise mt-6 max-w-lg text-lg leading-relaxed text-white/70" style={{ "--d": "520ms" } as CSSProperties}>
+        {/* middle: supporting copy (desktop: left, over the dark side of the scene) */}
+        <div className="relative mx-auto w-full max-w-6xl flex-1 px-5 max-md:order-2 md:flex md:items-center">
+        {/* depth layer: fastest — copy rises and fades first */}
+        <div className="depth-copy max-w-md py-6 md:py-0">
+          <p className="motion-rise text-lg leading-relaxed text-white/70" style={{ "--d": "520ms" } as CSSProperties}>
             Members, fees, UPI bills, receipts and reminders — in one app that works{" "}
             <span className="text-white">without internet</span> and keeps your data{" "}
             <span className="text-white">on your phone</span>.
@@ -110,10 +121,10 @@ export function Hero() {
           </ul>
         </div>
 
-        {/* App preview floats between the copy and the mascot on wide screens */}
-        <div className="pointer-events-none absolute left-[52%] top-[56%] hidden -translate-y-1/2 xl:block">
+        {/* App preview floats between the copy and the mascot on wide screens (behind line 2) */}
+        <div className="pointer-events-none absolute left-[48%] top-1/2 hidden -translate-y-1/2 xl:block">
           <div className="depth-phone">
-          <div className="motion-rise relative origin-left scale-[0.8]" style={{ "--d": "800ms" } as CSSProperties}>
+          <div className="motion-rise relative origin-left scale-[0.62]" style={{ "--d": "800ms" } as CSSProperties}>
             <PhoneMockup className="animate-float" />
             <div className="absolute -left-14 bottom-28 flex items-center gap-2.5 rounded-2xl border border-white/10 bg-surface/90 px-3.5 py-2.5 shadow-2xl backdrop-blur" aria-hidden>
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-lime text-ink">
@@ -128,8 +139,20 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Phones: room for the mascot below the copy */}
-        <div aria-hidden className="h-[96vw] md:hidden" />
+        </div>
+
+        {/* Phones: room for the mascot between the copy and line 2 */}
+        <div aria-hidden className="h-[85vw] md:hidden max-md:order-3" />
+
+        {/* bottom: line 2, in front of the scene (phones: right under line 1, so both are on the first screen) */}
+        <p aria-hidden className="hero-out-r relative z-10 whitespace-nowrap text-center max-md:order-1 max-md:mt-[0.8vh] md:pb-[3vh]">
+          <span
+            className="hero-in-r font-wide block text-[min(12.4vw,21.3vh)] font-black uppercase leading-[0.9] tracking-tight text-lime drop-shadow-[0_6px_18px_rgb(0_0_0/0.55)]"
+            style={{ "--d": "300ms" } as CSSProperties}
+          >
+            Like a pro.
+          </span>
+        </p>
       </div>
     </section>
   );

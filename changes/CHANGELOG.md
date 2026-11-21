@@ -1,5 +1,21 @@
 # Change log
 
+## 2026-11-22 — Hero headline: full-width display lines like the finale
+
+- Hero now mirrors "STRONGER / EVERY DAY.": eyebrow "GYM MANAGEMENT APP" (wide-tracked, ~80vw),
+  "RUN YOUR GYM" full width at the top (`min(9.2vw,15.8vh)`) and "LIKE A PRO." full width in lime
+  at the bottom (`min(12.4vw,21.3vh)`), sized from measured glyph widths to fill ~93vw like the
+  finale. Hero is one screen tall; copy + buttons sit between the lines; phone mockup smaller (0.62).
+- "Made for India" removed from the eyebrow (owner request).
+- Where line 1 crosses the mascot (md+), it turns to glass: the fill fades to 14 % (`.hero-ghost`
+  mask) and an outline copy (`.hero-ghost-stroke`, 1.5 px white 70 %) takes over, so the face stays
+  visible through the letters.
+- Phones: both lines stacked at the top (flex `order`), copy below, mascot below that.
+- Visual lines are `aria-hidden`; an `sr-only` h1 carries the same words. Entrance/exit sweep
+  animations unchanged.
+- Verified: lint, typecheck, build, `pnpm verify`; screenshots at 1920, 1440, 1024, 390 and 320 px —
+  no horizontal overflow from the hero (the 1024–1280 px overflow is the existing rotated marquee).
+
 ## 2026-11-22 — Hero headline animates like the finale lines
 
 - Eyebrow pill + "Run your gym" sweep in from the left and "like a pro." from the right, with

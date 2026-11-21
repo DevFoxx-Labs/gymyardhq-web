@@ -312,6 +312,17 @@ body {
   to { transform: translateX(30%); filter: blur(6px); }
 }
 
+/* Hero line 1 turns to "glass" where it crosses the mascot (wide screens only):
+   the fill fades to a faint tint and an outline copy takes over. */
+@media (min-width: 768px) {
+  .hero-ghost {
+    mask-image: linear-gradient(to right, #000 0%, #000 56%, rgb(0 0 0 / 0.14) 68%, rgb(0 0 0 / 0.14) 100%);
+  }
+  .hero-ghost-stroke {
+    mask-image: linear-gradient(to right, transparent 0%, transparent 56%, #000 68%, #000 100%);
+  }
+}
+
 @keyframes depth-copy {
   to { opacity: 0; transform: translateY(-22vh) scale(0.96); }
 }
