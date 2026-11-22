@@ -17,8 +17,23 @@ database safety, engineering workflow, web performance). Project-specific points
 ## Design system
 - Tokens in `app/globals.css` mirror the app's `AppTheme`: ink `#0b0c10`, surface `#13151b`,
   card `#1a1d26`, line `#1e222d`, accent lime `#b5f63d`, muted `#94a3b8`. Dark only.
-- Fonts via `next/font` (self-hosted at build): Inter (body), Archivo wide (`font-wide`, headings),
-  Hind (`font-deva`, Hindi pages).
+- Fonts, all self-hosted: Inter (body) and Archivo wide (`font-wide`, headings) via `next/font/local`
+  from `assets/fonts/` — Google's latin files + a 1 KB ₹ file, Archivo pinned at wdth 125. Built by
+  `design/tools/build_fonts.py`; never switch them back to `next/font/google` (that ships an 83 KB
+  latin-ext file per family for the ₹ sign). New characters outside latin + ₹ → extend the script
+  and the `unicode-range` in `app/layout.tsx` (`pnpm verify` fails otherwise). Hind (`font-deva`,
+  Hindi pages) stays on `next/font/google`, `preload: false`.
+
+## Performance (media-heavy site — global web-performance rule applies)
+- Before/after every visual or asset change: `pnpm build` + Lighthouse mobile (median of ≥ 5 runs,
+  interleaved with the previous build) **and** a full-page screenshot pixel diff at 390 and 1440 px
+  with reduced motion — "faster" never ships with an unintended visual change.
+- `next.config.ts` `images.deviceSizes` tops out at 1920 because no source is wider; keep every
+  source ≤ 1920 px (`pnpm verify` checks) or add the width.
+- Tried and rejected (measured 2026-11-22): `experimental.inlineCss` (CSS is duplicated in the RSC
+  payload → HTML 425 → 626 KB, worse TBT/LCP). `content-visibility: auto` on sections helps first
+  render a lot but clips overflowing mascots and shifts the scroll-progress runner — needs owner OK.
+- Hero LCP image: one `fetchPriority="high"` image only; videos start after `load` (SceneVideo).
 - **Icons: Hugeicons free only** — `@hugeicons/core-free-icons` through `components/icon.tsx`.
   No other icon library, no ad-hoc SVG icons. Decorative icons are `aria-hidden`; icon-only
   controls need an `aria-label`.

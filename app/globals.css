@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+/* Metric-matched fallbacks for the local Inter/Archivo faces (app/layout.tsx) —
+   the exact values next/font/google generated, so swap-time layout and any
+   character outside the font files render as before. */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local(Arial);
+  ascent-override: 90.44%;
+  descent-override: 22.52%;
+  line-gap-override: 0%;
+  size-adjust: 107.12%;
+}
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local(Arial);
+  ascent-override: 88.96%;
+  descent-override: 21.28%;
+  line-gap-override: 0%;
+  size-adjust: 98.7%;
+}
+
 /* Design tokens — mirror the Flutter app's AppTheme (lib/core/theme/app_theme.dart). */
 @theme {
   --color-ink: #0b0c10;

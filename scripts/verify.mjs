@@ -144,5 +144,45 @@ for (const [path, type] of [
   check(res.status === 200 && (res.headers.get("content-type") ?? "").includes(type), `${path} → ${type}`);
 }
 
+console.log("\nPerformance guards");
+{
+  /*
+   * Inter/Archivo ship only Google's "latin" range + ₹ (design/tools/build_fonts.py).
+   * A character from the dropped subsets (latin-ext, cyrillic, greek, vietnamese) would now
+   * render in the Arial fallback instead of the brand font — fail so the font build is
+   * extended (add the range there and in app/layout.tsx) rather than shipping a silent change.
+   * Devanagari is fine: Hind covers it and the Inter stack never had it.
+   */
+  const dropped = /[Ā-İĲ-őŔ-ʺʽ-˅ˇ-˙˛˝-˿Ͱ-ԯᴀ-ᶿḀ-῿₠-₫₭-₸₺-⃏ℓⱠ-Ɀⷠ-ⷿꙀ-ꚟ꜠-ꟿ]/gu;
+  const visibleText = (html) =>
+    html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/&[a-z#0-9]+;/gi, " ");
+  for (const path of pages) {
+    const found = [...new Set(visibleText(await (await get(path)).text()).match(dropped) ?? [])];
+    check(found.length === 0, `${path} uses only characters the self-hosted fonts cover${found.length ? ` (found: ${found.join(" ")})` : ""}`);
+  }
+  // Every image srcset width must exist in next.config deviceSizes/imageSizes; the largest
+  // device size must stay ≥ the widest source image (1913 px today), or wide screens get softer art.
+  const home = await (await get("/")).text();
+  const widths = [...home.matchAll(/\/_next\/image\?url=[^"\s,]*?(?:&amp;|&|\\u0026)w=(\d+)/g)].map((m) => Number(m[1]));
+  check(widths.length > 0 && Math.max(...widths) <= 1920, `home srcset tops out at ${Math.max(...widths)} px (no 2048/3840 duplicates)`);
+
+  const { existsSync, readdirSync, readFileSync } = await import("node:fs");
+  const webpWidth = (buf) => {
+    const chunk = buf.toString("ascii", 12, 16);
+    if (chunk === "VP8X") return 1 + buf.readUIntLE(24, 3);
+    if (chunk === "VP8 ") return buf.readUInt16LE(26) & 0x3fff;
+    if (chunk === "VP8L") return 1 + (buf.readUInt32LE(21) & 0x3fff);
+    return 0;
+  };
+  const tooWide = [];
+  for (const dir of ["assets/scenes", "assets/cutouts", "public/images"].filter((d) => existsSync(d))) {
+    for (const f of readdirSync(dir).filter((n) => n.endsWith(".webp"))) {
+      const w = webpWidth(readFileSync(`${dir}/${f}`));
+      if (w > 1920) tooWide.push(`${dir}/${f} (${w}px)`);
+    }
+  }
+  check(tooWide.length === 0, `no source image wider than the largest deviceSize 1920${tooWide.length ? ` — ${tooWide.join(", ")}` : ""}`);
+}
+
 console.log(failures ? `\n${failures} check(s) failed` : "\nAll checks passed");
 process.exit(failures ? 1 : 0);

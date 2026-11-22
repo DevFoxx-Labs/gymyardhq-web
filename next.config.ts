@@ -36,6 +36,15 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  images: {
+    /**
+     * Default minus 2048/3840: no source image is wider than 1913 px and next/image never
+     * upscales, so those entries only returned the 1920 file again while adding two srcset
+     * candidates to every image in the HTML and RSC payload. Keep the top entry ≥ the widest
+     * source; if a wider image is added, add a matching width here.
+     */
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+  },
   /** Lets a verification build run beside `pnpm dev` without sharing (and corrupting) `.next`. */
   distDir: process.env.NEXT_DIST_DIR || ".next",
   turbopack: {

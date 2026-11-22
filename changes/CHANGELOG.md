@@ -1,5 +1,35 @@
 # Change log
 
+## 2026-11-22 — Performance: trimmed fonts + srcset, look unchanged
+
+- **Fonts:** `next/font/google` downloaded Inter's and Archivo's 83 KB `latin-ext` files on every
+  page just for the ₹ sign, and Archivo carried its whole width axis although only width 125 is
+  used. Now `next/font/local` from `assets/fonts/` (built by `design/tools/build_fonts.py` from
+  the same Google files): Inter latin byte-identical, Archivo latin pinned at wdth 125
+  (87 → 34 KB), ₹ in 1 KB files with their own `unicode-range`. The `Inter/Archivo Fallback`
+  faces moved to `globals.css` with next/font's exact values. Fonts on the home page: 353 → ~120 KB.
+- **Images:** `images.deviceSizes` ends at 1920 (no 2048/3840). No source is wider than 1913 px
+  and next/image never upscales, so those widths returned the same file again, while adding two
+  srcset candidates per image to the HTML and RSC payload. Every image keeps the same pixels.
+- **Guards** (`pnpm verify`): fails if a page contains a character outside the font files, if
+  srcset goes above 1920, or if a source image is wider than 1920 px.
+- **Tried and rejected:** `experimental.inlineCss` (HTML 425 → 626 KB because Next also puts the
+  CSS in the RSC payload; TBT and LCP worse). `content-visibility: auto` (big first-render win,
+  but clips overflowing mascots and shifts the scroll runner) is left for owner decision → known
+  gap 16. Videos left as-is (already 720p, ~800 kbps, no audio, start after `load`).
+- Same font/srcset/verify changes copied into the `gymyard-landing-kit` template. Global
+  web-performance rule + skill §6b now cover graphics/video-heavy sites.
+- Verified: `pnpm lint` ✓, `pnpm typecheck` ✓, production build ✓, `pnpm verify` all passed (the new
+  srcset guard fails against the old build, as intended). **Look:** full-page screenshots
+  (reduced motion, 6 routes × 390 px@2x and 1440 px) diffed against the pre-change build; the
+  baseline is deterministic (two runs diff to 0 px). 10 of 12 are 0 px. Desktop home has 28 px
+  and mobile privacy policy 54 px out of 16–17 M: a 1-px antialiasing column on Archivo glyph
+  edges, invisible at 3× zoom.
+- **Lab numbers** (Lighthouse 12 mobile, slow 4G + 4× CPU, localhost, median of interleaved runs,
+  old build vs new): LCP 5.54 → 4.29 s, FCP 2.59 → 1.83 s, page weight 671 → 451 KB, CLS 0 → 0.
+  TBT swings 200–1,000 ms between runs on this machine for both builds, so there is no reliable
+  TBT delta. Desktop: LCP 1.25 → 1.11 s, FCP 0.60 → 0.48 s, 2.02 → 1.80 MB (mostly the hero video).
+
 ## 2026-11-22 — Hero headline: full-width display lines like the finale
 
 - Hero now mirrors "STRONGER / EVERY DAY.": eyebrow "GYM MANAGEMENT APP" (wide-tracked, ~80vw),
