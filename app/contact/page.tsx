@@ -5,12 +5,14 @@ import {
   Delete02Icon,
   Mail01Icon,
   Shield01Icon,
+  WhatsappIcon,
 } from "@hugeicons/core-free-icons";
 import supportScene from "@/assets/scenes/support.webp";
 import { Icon } from "@/components/icon";
 import { BlendedScene } from "@/components/scene/blended-scene";
 import { isPlaceholder, site } from "@/config/site";
 import { pageMeta } from "@/lib/seo";
+import { whatsAppUrl } from "@/lib/whatsapp";
 import { breadcrumbSchema, graph, JsonLd } from "@/components/seo/json-ld";
 
 export const ensureStatic = "navigation";
@@ -93,6 +95,30 @@ export default function ContactPage() {
           </p>
         </section>
       </div>
+
+      {site.whatsapp.isLive ? (
+        <section className="mt-5 flex flex-col gap-5 rounded-3xl border border-[#25D366]/30 bg-[#25D366]/5 p-7 sm:flex-row sm:items-center">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#25D366] text-ink">
+            <Icon icon={WhatsappIcon} size={22} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-xl font-bold">Chat on WhatsApp</h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted">
+              Questions about the app, setting up your gym or getting started. Please never send your MPIN, backup
+              password or database connection string. Privacy requests and grievances go to the Grievance Officer by
+              email.
+            </p>
+          </div>
+          <a
+            href={whatsAppUrl(site.whatsapp.number, "Hi GymYardHQ team! I have a question about the app.\n\n(from the website: /contact)")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-3 text-sm font-bold text-ink hover:brightness-110"
+          >
+            <Icon icon={WhatsappIcon} size={18} /> Open WhatsApp
+          </a>
+        </section>
+      ) : null}
 
       <section className="mt-5 rounded-3xl border border-line bg-surface p-7">
         <h2 className="text-xl font-bold">What to write in a privacy request</h2>

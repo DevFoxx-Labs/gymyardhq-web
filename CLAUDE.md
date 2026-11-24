@@ -79,6 +79,11 @@ database safety, engineering workflow, web performance). Project-specific points
   requires a consent banner (Reject = Accept prominence), a Cookie Policy entry per key and a
   "Cookie preferences" footer link **before** it ships. `scripts/verify.mjs` fails on third-party
   scripts/iframes.
+- **WhatsApp widget** (`components/whatsapp/`, copy `content/whatsapp.ts`, config `site.whatsapp`):
+  first-party only. Never swap it for a third-party chat script/SDK (that is a tracker needing
+  consent). It stores nothing and sends nothing until the visitor opens `wa.me`. Flag
+  `WHATSAPP_WIDGET_LIVE` fails closed. Answers must match app facts; keep the quick replies in
+  `docs/whatsapp-business-setup.md` in step. Check the on state with `EXPECT_WHATSAPP=1 pnpm verify`.
 
 ## Verify before "done"
 ```

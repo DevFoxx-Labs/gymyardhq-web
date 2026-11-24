@@ -7,8 +7,8 @@ import type { LegalEntry } from "./types";
  */
 export const privacyPolicy: LegalEntry = {
   slug: "privacy-policy",
-  version: "2026-11-20",
-  lastUpdated: "2026-11-20",
+  version: "2026-11-24",
+  lastUpdated: "2026-11-24",
   en: {
     title: "Privacy Policy",
     summary:
@@ -96,6 +96,8 @@ export const privacyPolicy: LegalEntry = {
           {
             list: [
               "Messages you send us (support, privacy requests, grievances) — your name, email address and what you write. Purpose: to reply and resolve your request. Basis: you provide it voluntarily for this purpose (DPDP Act s.7(a)). Kept for {{supportRetention}}, then deleted, unless a law requires us to keep it longer.",
+              "WhatsApp messages you choose to send us — your WhatsApp phone number, WhatsApp profile name and photo (as WhatsApp shows them to us), what you write and the website page you wrote from. Purpose: to answer your questions about the app and help you get started. Basis: you start the chat voluntarily for this purpose (DPDP Act s.7(a)). Kept for {{supportRetention}}, then deleted, unless a law requires us to keep it longer. We do not add you to broadcast lists or send you marketing messages unless you separately ask for them, and you can stop at any time by telling us or blocking the chat.",
+              "The chat button on this website — the instant answers in the chat box run only in your browser. They store nothing and send nothing to us or to WhatsApp. Data reaches us only if you tap \"Continue on WhatsApp\" (or the send button) and then send the message yourself in WhatsApp.",
               "Website technical logs — IP address, browser type, page requested and time, recorded by our hosting provider when you visit this website. Purpose: to deliver the website and protect it against abuse. Kept for {{logRetention}}.",
               "Google Play statistics — Google may give us aggregated install numbers and anonymous crash and performance reports. We do not receive your name, email or the data you record in the app.",
             ],
@@ -112,6 +114,7 @@ export const privacyPolicy: LegalEntry = {
             list: [
               "{{websiteHost}} — hosts this website.",
               "{{emailProvider}} — delivers and stores our support email.",
+              "WhatsApp (WhatsApp LLC / Meta Platforms) — carries the WhatsApp messages you choose to send us, under WhatsApp's own terms and privacy policy.",
               "Google (Google Play) — distributes the app under Google's own privacy policy.",
             ],
           },
@@ -122,7 +125,7 @@ export const privacyPolicy: LegalEntry = {
         id: "transfers",
         heading: "8. Transfers outside India",
         blocks: [
-          "We do not transfer the data you record in the app anywhere. Our website host and email provider may process the limited data in section 6 outside India. We will not transfer personal data to any country that the Government of India restricts under section 16 of the DPDP Act.",
+          "We do not transfer the data you record in the app anywhere. Our website host, email provider and WhatsApp may process the limited data in section 6 outside India. We will not transfer personal data to any country that the Government of India restricts under section 16 of the DPDP Act.",
         ],
       },
       {
@@ -134,7 +137,7 @@ export const privacyPolicy: LegalEntry = {
               "App data on your phone — until you delete it, reset the app or uninstall it.",
               "Backup files you export — as long as you keep the file.",
               "Online-mode data — as long as you keep it in your own database.",
-              "Support and grievance messages — {{supportRetention}}.",
+              "Support and grievance messages, including WhatsApp chats — {{supportRetention}}.",
               "Website logs — {{logRetention}}.",
             ],
           },
@@ -302,6 +305,8 @@ export const privacyPolicy: LegalEntry = {
           {
             list: [
               "आपके भेजे संदेश (सपोर्ट, गोपनीयता अनुरोध, शिकायतें) — आपका नाम, ईमेल पता और आपका लिखा संदेश। उद्देश्य: जवाब देना और अनुरोध हल करना। आधार: आप इसी उद्देश्य के लिए स्वेच्छा से देते हैं (DPDP अधिनियम धारा 7(a))। {{supportRetention}} तक रखा जाता है, फिर मिटा दिया जाता है, जब तक कोई कानून इसे अधिक समय तक रखना ज़रूरी न बनाए।",
+              "WhatsApp पर आपके भेजे संदेश — आपका WhatsApp फ़ोन नंबर, WhatsApp प्रोफ़ाइल नाम और फ़ोटो (जैसा WhatsApp हमें दिखाता है), आपका लिखा संदेश और वह वेबसाइट पेज जहाँ से आपने लिखा। उद्देश्य: ऐप के बारे में आपके सवालों का जवाब देना और शुरू करने में मदद करना। आधार: आप इसी उद्देश्य के लिए स्वेच्छा से चैट शुरू करते हैं (DPDP अधिनियम धारा 7(a))। {{supportRetention}} तक रखा जाता है, फिर मिटा दिया जाता है, जब तक कोई कानून इसे अधिक समय तक रखना ज़रूरी न बनाए। जब तक आप अलग से न माँगें, हम आपको ब्रॉडकास्ट सूची में नहीं जोड़ते और मार्केटिंग संदेश नहीं भेजते; आप हमें बताकर या चैट ब्लॉक करके कभी भी रोक सकते हैं।",
+              "इस वेबसाइट का चैट बटन — चैट बॉक्स के तुरंत जवाब केवल आपके ब्राउज़र में चलते हैं। वे कुछ भी सेव नहीं करते और हमें या WhatsApp को कुछ नहीं भेजते। डेटा हम तक तभी पहुँचता है जब आप \"WhatsApp पर आगे बढ़ें\" (या भेजें बटन) दबाकर WhatsApp में खुद संदेश भेजते हैं।",
               "वेबसाइट तकनीकी लॉग — IP पता, ब्राउज़र प्रकार, माँगा गया पेज और समय, जो वेबसाइट देखने पर हमारा होस्टिंग प्रोवाइडर दर्ज करता है। उद्देश्य: वेबसाइट दिखाना और दुरुपयोग से बचाना। {{logRetention}} तक रखा जाता है।",
               "Google Play आँकड़े — Google हमें कुल इंस्टॉल संख्या और अनाम क्रैश व परफ़ॉर्मेंस रिपोर्ट दे सकता है। हमें आपका नाम, ईमेल या ऐप में दर्ज डेटा नहीं मिलता।",
             ],
@@ -318,6 +323,7 @@ export const privacyPolicy: LegalEntry = {
             list: [
               "{{websiteHost}} — यह वेबसाइट होस्ट करता है।",
               "{{emailProvider}} — हमारा सपोर्ट ईमेल पहुँचाता और रखता है।",
+              "WhatsApp (WhatsApp LLC / Meta Platforms) — WhatsApp की अपनी शर्तों और गोपनीयता नीति के तहत आपके भेजे WhatsApp संदेश हम तक पहुँचाता है।",
               "Google (Google Play) — Google की अपनी गोपनीयता नीति के तहत ऐप वितरित करता है।",
             ],
           },
@@ -328,7 +334,7 @@ export const privacyPolicy: LegalEntry = {
         id: "transfers",
         heading: "8. भारत से बाहर ट्रांसफ़र",
         blocks: [
-          "ऐप में दर्ज डेटा को हम कहीं ट्रांसफ़र नहीं करते। हमारा वेबसाइट होस्ट और ईमेल प्रोवाइडर सेक्शन 6 का सीमित डेटा भारत से बाहर प्रोसेस कर सकते हैं। DPDP अधिनियम की धारा 16 के तहत भारत सरकार द्वारा प्रतिबंधित किसी देश में हम व्यक्तिगत डेटा ट्रांसफ़र नहीं करेंगे।",
+          "ऐप में दर्ज डेटा को हम कहीं ट्रांसफ़र नहीं करते। हमारा वेबसाइट होस्ट, ईमेल प्रोवाइडर और WhatsApp सेक्शन 6 का सीमित डेटा भारत से बाहर प्रोसेस कर सकते हैं। DPDP अधिनियम की धारा 16 के तहत भारत सरकार द्वारा प्रतिबंधित किसी देश में हम व्यक्तिगत डेटा ट्रांसफ़र नहीं करेंगे।",
         ],
       },
       {
@@ -340,7 +346,7 @@ export const privacyPolicy: LegalEntry = {
               "आपके फ़ोन पर ऐप डेटा — जब तक आप उसे मिटाते, ऐप रीसेट या अनइंस्टॉल नहीं करते।",
               "आपकी एक्सपोर्ट की गई बैकअप फ़ाइलें — जब तक आप फ़ाइल रखते हैं।",
               "ऑनलाइन-मोड डेटा — जब तक आप उसे अपने डेटाबेस में रखते हैं।",
-              "सपोर्ट और शिकायत संदेश — {{supportRetention}}।",
+              "सपोर्ट और शिकायत संदेश, WhatsApp चैट सहित — {{supportRetention}}।",
               "वेबसाइट लॉग — {{logRetention}}।",
             ],
           },

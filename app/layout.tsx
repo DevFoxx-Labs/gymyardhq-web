@@ -3,6 +3,7 @@ import { Hind } from "next/font/google";
 import localFont from "next/font/local";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { WhatsAppWidget } from "@/components/whatsapp/whatsapp-widget";
 import { site } from "@/config/site";
 import "./globals.css";
 
@@ -121,6 +122,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+        {site.whatsapp.isLive ? <WhatsAppWidget number={site.whatsapp.number} hours={site.whatsapp.hours} /> : null}
       </body>
     </html>
   );

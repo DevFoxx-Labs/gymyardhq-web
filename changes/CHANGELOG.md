@@ -1,5 +1,66 @@
 # Change log
 
+## 2026-11-24 — WhatsApp chat widget (leads + support)
+
+**What**
+- `components/whatsapp/whatsapp-widget.tsx`: first-party WhatsApp chat widget, bottom-right on
+  every page (above the scroll runner on desktop, safe-area aware on phones).
+  - **Proactive auto-message:** after 15 s or ~45 % scroll, once per visit, a "typing…" nudge then
+    "Running a gym? Ask us anything" + unread badge. Never on `/legal/*`. Dismissible.
+  - **Auto-replies in the chat box:** typed greeting, 6 quick-reply topics (free?, offline, fees/UPI/
+    reminders, setup help, app support, privacy) with instant answers + links, then a follow-up
+    with "Continue on WhatsApp". Free-text box (Enter = send).
+  - **Online/away:** from `WHATSAPP_HOURS`/`WHATSAPP_DAYS` (IST). Outside hours the header and an
+    away note say when we're back. No hours configured = no availability claim.
+  - **English + हिंदी** toggle (auto-Hindi on `/…/hi` pages); copy in `content/whatsapp.ts`, every
+    answer matches the home FAQ / feature pages.
+  - Opens `wa.me/<number>?text=…` with a topic-specific prefilled message tagged
+    `(from the website: /page)` so the owner sees which page brought the lead.
+- `/contact`: "Chat on WhatsApp" card (only when the widget is live).
+- `config/site.ts` → `site.whatsapp` (fail-closed flag `WHATSAPP_WIDGET_LIVE`, number validated,
+  hours parsed; build throws when on with a bad number/hours). `lib/whatsapp.ts`: link builder +
+  IST status. `.env.example` documents the keys.
+- Privacy Policy `2026-11-24` (EN + HI): WhatsApp messages in s.6 (data, purpose, basis, retention,
+  no marketing without asking), the chat button runs in-browser only, WhatsApp/Meta in s.7, transfers
+  s.8, retention s.9. Cookie Policy `2026-11-24`: the button sets no cookies/storage, loads nothing.
+- `docs/whatsapp-business-setup.md`: greeting / away / quick-reply texts and labels for the
+  WhatsApp Business app (the auto-replies after the visitor sends), plus DPDP do's and don'ts.
+- `pnpm verify`: new WhatsApp checks (widget on/off per flag via `EXPECT_WHATSAPP=1`, valid
+  `wa.me` link on /contact, no WhatsApp/Meta script, Privacy Policy mentions WhatsApp).
+
+**Threat model (low risk: no backend, nothing stored)**
+- Assets: visitors' privacy, the business number's reputation, accuracy of claims.
+- Abuse cases → layer that stops it:
+  - Third-party tracking via a chat SDK → none loaded; widget is our own code, CSP `'self'`
+    unchanged (prevent) + verify fails on WhatsApp/Meta scripts (enforce).
+  - Injection via typed text → only URL-encoded into the visitor's own wa.me link, control chars
+    stripped, length capped, rendered as React text (prevent). No server endpoint to abuse, so no
+    rate limit is needed.
+  - Reverse tabnabbing → `rel="noopener noreferrer"` / `window.open(…, "noopener,noreferrer")`.
+  - Broken/wrong number published → fail-closed flag + build-time validation (prevent).
+  - Consent bundling / silent marketing → widget sends nothing; Privacy Policy states no marketing
+    without asking; setup doc tells the owner not to broadcast (prevent: process).
+  - Visitors sending secrets (MPIN, backup password) → warned in the support answer and the
+    WhatsApp greeting (limit).
+  - Lost/stolen business phone → owner TODO: WhatsApp two-step verification + screen lock (recover).
+
+**Verification**
+- `pnpm lint` 0 problems · `pnpm typecheck` 0 errors · production build ✓ (all routes still static)
+  · `pnpm verify` all passed with the widget **on** (`EXPECT_WHATSAPP=1`, test number) **and off**
+  · `pnpm audit --prod` no known vulnerabilities.
+- Helper unit tests (node:test, scratch): URL encoding / control-char strip / 600-char cap; IST
+  open/away incl. before opening, after closing, Saturday night → Monday, closed Sunday → "tomorrow".
+- Config fail-closed: flag on + no number / short number / reversed hours → build throws;
+  `WHATSAPP_WIDGET_LIVE=yes` → off.
+- Headless Chrome at 320 / 390 / 1440 px: nudge, greeting, topic answer, follow-up CTA, Hindi; no
+  horizontal overflow, no console errors, no request to any other origin, `localStorage`,
+  `sessionStorage` and `document.cookie` empty, Esc closes and returns focus to the launcher,
+  prefilled message + page tag correct. 320 px panel capped below the sticky header.
+- JS: the widget's chunk is 16.5 KB gzipped (shares client code with next/image).
+- Not done: Lighthouse A/B and the pixel-diff baseline from CLAUDE.md (the widget is a fixed
+  overlay with no layout impact); real-device and screen-reader test; tapping through to a real
+  WhatsApp app.
+
 ## 2026-11-22 — Performance: trimmed fonts + srcset, look unchanged
 
 - **Fonts:** `next/font/google` downloaded Inter's and Archivo's 83 KB `latin-ext` files on every

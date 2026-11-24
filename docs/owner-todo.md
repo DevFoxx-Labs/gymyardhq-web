@@ -32,3 +32,17 @@ Never ticked off without the owner's confirmation.
 - [ ] Verify the domain in Google Search Console and Bing Webmaster Tools; submit `/sitemap.xml`.
 - [ ] After the Play listing is live, set `PLAY_STORE_LIVE=true` (adds the Play URL to the app and organization schema).
 - [ ] Run PageSpeed Insights on the live home page (mobile) and share the numbers.
+
+## 2026-11-24 — WhatsApp chat widget
+
+- [ ] In the hosting env set `WHATSAPP_WIDGET_LIVE=true`, `WHATSAPP_NUMBER` (business number,
+      country code first), and optionally `WHATSAPP_HOURS` / `WHATSAPP_DAYS`, then redeploy.
+- [ ] Install **WhatsApp Business** on that number; set profile, business hours (same as the
+      env), greeting message, away message, quick replies and labels from
+      `docs/whatsapp-business-setup.md`.
+- [ ] Turn on WhatsApp **two-step verification** and a screen lock on the business phone; decide
+      on chat backup (off, or covered by the retention period).
+- [ ] Confirm that WhatsApp chats follow the support retention (`RETENTION_SUPPORT_EMAILS`) or give
+      a separate period, and have the lawyer review the updated Privacy Policy s.6–9 (EN + HI).
+- [ ] Tap through once on a real phone: widget → Continue on WhatsApp → message arrives with the
+      `(from the website: …)` tag → greeting auto-reply fires.

@@ -82,6 +82,21 @@ for (const path of pages) {
   }
 }
 
+console.log("\nWhatsApp widget");
+{
+  // Build with WHATSAPP_WIDGET_LIVE=true + a number and run with EXPECT_WHATSAPP=1 to check the on state.
+  const expectOn = process.env.EXPECT_WHATSAPP === "1";
+  const home = await (await get("/")).text();
+  const contact = await (await get("/contact")).text();
+  const legal = await (await get("/legal/privacy-policy")).text();
+  check(/data-whatsapp-widget/.test(home) === expectOn, `widget ${expectOn ? "present" : "absent (flag off)"} on /`);
+  check(/data-whatsapp-widget/.test(legal) === expectOn, `widget ${expectOn ? "present" : "absent"} on legal pages`);
+  const links = [...contact.matchAll(/href="(https:\/\/wa\.me\/[^"]*)"/g)].map((m) => m[1]);
+  check(expectOn ? links.length === 1 && /^https:\/\/wa\.me\/[1-9]\d{9,14}\?text=/.test(links[0]) : links.length === 0, `/contact WhatsApp link ${expectOn ? "is a valid wa.me click-to-chat link" : "hidden"}`);
+  check(!/<script[^>]+src="[^"]*(whatsapp|wa\.me|facebook|fbcdn)/i.test(home), "no WhatsApp/Meta script is loaded");
+  check(/WhatsApp/.test(legal), "Privacy Policy discloses WhatsApp");
+}
+
 console.log("\nNot found");
 for (const path of ["/legal/does-not-exist", "/legal/terms/hi", "/api/legal/does-not-exist"]) {
   const res = await get(path);

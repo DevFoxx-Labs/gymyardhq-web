@@ -525,3 +525,37 @@ body {
 .legal h2 {
   scroll-margin-top: 6rem;
 }
+
+/*
+ * ───────────── WhatsApp chat widget (components/whatsapp/whatsapp-widget.tsx) ─────────────
+ * Fixed overlay, so it never shifts layout. Only transform/opacity animate; with reduced
+ * motion everything appears in its final state.
+ */
+.wa-wall {
+  background-image: radial-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+@keyframes wa-pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes wa-msg {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes wa-dot {
+  0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+@keyframes wa-ring {
+  from { opacity: 0.8; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.6); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .wa-launcher { animation: wa-pop 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) 0.6s both; }
+  .wa-panel { animation: wa-pop 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both; transform-origin: bottom right; }
+  .wa-teaser { animation: wa-pop 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; transform-origin: bottom right; }
+  .wa-msg { animation: wa-msg 0.25s ease-out both; }
+  .wa-dot { animation: wa-dot 1.1s ease-in-out infinite; }
+  .wa-ring { animation: wa-ring 1.6s ease-out 3; }
+}

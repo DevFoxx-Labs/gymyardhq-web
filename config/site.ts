@@ -38,6 +38,71 @@ function siteUrl(): string {
   return "http://localhost:3000";
 }
 
+export type WhatsAppHours = {
+  /** Minutes after midnight IST, e.g. 600 = 10:00. `end` is exclusive. */
+  start: number;
+  end: number;
+  /** ISO weekdays the team replies on: 1 = Monday … 7 = Sunday. */
+  days: number[];
+};
+
+function parseClock(value: string): number | null {
+  const m = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(value.trim());
+  return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+}
+
+function parseDays(value: string): number[] | null {
+  const days = new Set<number>();
+  for (const part of value.split(",").map((p) => p.trim()).filter(Boolean)) {
+    const range = /^([1-7])(?:-([1-7]))?$/.exec(part);
+    if (!range) return null;
+    const from = Number(range[1]);
+    const to = Number(range[2] ?? range[1]);
+    if (to < from) return null;
+    for (let d = from; d <= to; d++) days.add(d);
+  }
+  return days.size ? [...days].sort((a, b) => a - b) : null;
+}
+
+/**
+ * WhatsApp chat widget. Fails closed: shown only when WHATSAPP_WIDGET_LIVE is exactly "true".
+ * When it is on, a missing/invalid number or malformed hours stop the build instead of
+ * publishing a broken chat button. The number is public by design (it is a contact channel).
+ */
+function whatsApp() {
+  const isLive = flag("WHATSAPP_WIDGET_LIVE");
+  const rawNumber = process.env.WHATSAPP_NUMBER?.trim() ?? "";
+  const digits = rawNumber.replace(/[\s()+-]/g, "");
+  const validNumber = /^[1-9]\d{9,14}$/.test(digits);
+
+  const rawHours = process.env.WHATSAPP_HOURS?.trim() ?? "";
+  const rawDays = process.env.WHATSAPP_DAYS?.trim() || "1-7";
+  let hours: WhatsAppHours | null = null;
+  if (rawHours) {
+    const [s, e] = rawHours.split("-");
+    const start = s ? parseClock(s) : null;
+    const end = e ? parseClock(e) : null;
+    const days = parseDays(rawDays);
+    if (start === null || end === null || end <= start || !days) {
+      if (isLive) throw new Error('WHATSAPP_HOURS must look like "10:00-19:00" and WHATSAPP_DAYS like "1-6" or "1,2,3".');
+    } else {
+      hours = { start, end, days };
+    }
+  }
+
+  if (isLive && !validNumber) {
+    throw new Error("WHATSAPP_WIDGET_LIVE=true needs WHATSAPP_NUMBER with country code, digits only (e.g. 919876543210).");
+  }
+
+  return {
+    isLive: isLive && validNumber,
+    /** Digits only, with country code — the format wa.me expects. Empty when not configured. */
+    number: validNumber ? digits : "",
+    /** Business hours in IST; null = the widget makes no online/away claim. */
+    hours,
+  };
+}
+
 export const site = {
   name: "GymYardHQ",
   tagline: "Run your gym like a pro",
@@ -87,6 +152,8 @@ export const site = {
     minAndroid: "Android 7.0",
     languages: ["English", "हिन्दी"],
   },
+
+  whatsapp: whatsApp(),
 } as const;
 
 /** Tokens usable inside legal texts as {{token}}; resolved at render time. */

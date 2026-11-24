@@ -7,8 +7,8 @@ import type { LegalEntry } from "./types";
  */
 export const cookiePolicy: LegalEntry = {
   slug: "cookie-policy",
-  version: "2026-11-20",
-  lastUpdated: "2026-11-20",
+  version: "2026-11-24",
+  lastUpdated: "2026-11-24",
   en: {
     title: "Cookie Policy",
     summary: "This website does not use cookies, browser storage, analytics or trackers.",
@@ -17,8 +17,9 @@ export const cookiePolicy: LegalEntry = {
         id: "none",
         heading: "We use no cookies",
         blocks: [
-          "This website does not set any cookies and does not store anything in your browser (no local storage or session storage). It loads no analytics, advertising pixels, session recording, chat widgets or social-media embeds. That is why you do not see a cookie banner.",
+          "This website does not set any cookies and does not store anything in your browser (no local storage or session storage). It loads no analytics, advertising pixels, session recording, third-party chat widgets or social-media embeds. That is why you do not see a cookie banner.",
           "Fonts and images are served from this website itself, not from third-party servers.",
+          "The WhatsApp chat button is built into this website. It loads nothing from WhatsApp, sets no cookies and stores nothing in your browser. It only opens WhatsApp (wa.me) when you tap \"Continue on WhatsApp\" or send; from then on WhatsApp's own privacy policy applies.",
         ],
       },
       {
